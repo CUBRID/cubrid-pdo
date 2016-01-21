@@ -1,0 +1,23 @@
+// $Id: config.w32 261548 2010-09-20 13:37:29Z fanyifan $
+// vim:ft=javascript
+
+ARG_WITH("pdo-cubrid", "PDO_CUBRID support", "no");
+
+if (PHP_PDO_CUBRID != "no") {
+  pdo_cubrid_lib_paths = PHP_PHP_BUILD + "\\lib\\cubrid;";
+  pdo_cubrid_include_paths = PHP_PHP_BUILD + "\\include\\cubrid;"
+
+  if (PHP_PDO_CUBRID != "yes") {
+    pdo_cubrid_lib_paths += PHP_PDO_CUBRID + "\\lib;";
+    pdo_cubrid_include_paths += PHP_PDO_CUBRID + "\\include;";
+  }
+
+  if (CHECK_LIB("cascci.lib", "pdo_cubrid", pdo_cubrid_lib_paths) && 
+      CHECK_HEADER_ADD_INCLUDE("cas_cci.h", "CFLAGS_PDO_CUBRID", pdo_cubrid_include_paths)) { 
+    EXTENSION("pdo_cubrid", "pdo_cubrid.c cubrid_driver.c cubrid_statement.c"); 
+    AC_DEFINE('HAVE_PDO_CUBRID', 1, 'Have PDO_CUBRID library');
+    ADD_EXTENSION_DEP('pdo_cubrid', 'pdo');
+  } else { 
+    WARNING("pdo_cubrid not enabled; libraries and headers not found");
+  }
+}
