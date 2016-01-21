@@ -103,7 +103,7 @@ array(16) {
   ["table"]=>
   string(11) "cubrid_test"
   ["def"]=>
-  string(4) "NULL"
+  string(0) ""
   ["precision"]=>
   int(0)
   ["scale"]=>
