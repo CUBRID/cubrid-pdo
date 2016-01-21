@@ -69,6 +69,9 @@ typedef enum
 #define CUBRID_SCH_EXPORTED_KEYS		CCI_SCH_EXPORTED_KEYS
 #define CUBRID_SCH_CROSS_REFERENCE		CCI_SCH_CROSS_REFERENCE
 
+/* check if query exec finished every interval */
+#define EXEC_CHECK_INTERVAL 10
+
 /* error codes */
 #define CUBRID_ER_NO_MORE_MEMORY			-30001
 #define CUBRID_ER_INVALID_SQL_TYPE			-30002
