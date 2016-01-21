@@ -33,7 +33,7 @@ array(16) {
   ["def"]=>
   string(0) ""
   ["precision"]=>
-  int(10)
+  int(0)
   ["scale"]=>
   int(0)
   ["not_null"]=>
@@ -67,7 +67,7 @@ array(16) {
   ["def"]=>
   string(0) ""
   ["precision"]=>
-  int(10)
+  int(0)
   ["scale"]=>
   int(0)
   ["not_null"]=>
@@ -101,7 +101,7 @@ array(16) {
   ["def"]=>
   string(0) ""
   ["precision"]=>
-  int(10)
+  int(0)
   ["scale"]=>
   int(0)
   ["not_null"]=>
@@ -169,7 +169,7 @@ array(16) {
   ["def"]=>
   string(0) ""
   ["precision"]=>
-  int(10)
+  int(0)
   ["scale"]=>
   int(0)
   ["not_null"]=>

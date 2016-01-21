@@ -110,8 +110,7 @@ static const DB_TYPE_INFO db_type_info[] = {
 
     {"OBJECT", CCI_U_TYPE_OBJECT, MAX_LEN_OBJECT},
 	{"BLOB", CCI_U_TYPE_BLOB, MAX_LEN_LOB},
-	{"CLOB", CCI_U_TYPE_CLOB, MAX_LEN_LOB},
-	{"ENUM", CCI_U_TYPE_ENUM, -1},
+	{"CLOB", CCI_U_TYPE_CLOB, MAX_LEN_LOB}
 };
 
 /************************************************************************
@@ -188,6 +187,7 @@ static int cubrid_stmt_execute(pdo_stmt_t *stmt TSRMLS_DC)
     int res_col_count = 0;
 
 	char exec_flag = CCI_EXEC_QUERY_ALL;
+	int query_time_msec = 0;
 
 	int cubrid_retval = 0;
 	long exec_ret = 0;
@@ -222,8 +222,27 @@ static int cubrid_stmt_execute(pdo_stmt_t *stmt TSRMLS_DC)
 		}
 	}
 
+	if (S->H->query_timeout != -1) {
+		exec_flag |= CCI_EXEC_THREAD;
+	}
+
 	exec_ret = cci_execute(S->stmt_handle, exec_flag, 0, &error);
 	
+	if (S->H->query_timeout != -1 && exec_ret == CCI_ER_THREAD_RUNNING) {
+		do {
+			SLEEP_MILISEC(0, EXEC_CHECK_INTERVAL);
+			query_time_msec += EXEC_CHECK_INTERVAL;
+
+			exec_ret = cci_get_thread_result(S->H->conn_handle, &error);
+		} while (exec_ret == CCI_ER_THREAD_RUNNING && query_time_msec < S->H->query_timeout * 1000);
+
+		if (exec_ret == CCI_ER_THREAD_RUNNING) {
+			pdo_cubrid_error_stmt(stmt, CUBRID_ER_EXEC_TIMEOUT, NULL, NULL);
+			cci_cancel(S->H->conn_handle);
+			return 0;
+		}
+	}
+
 	if (exec_ret < 0) {
 		pdo_cubrid_error_stmt(stmt, exec_ret, &error, NULL);
 		return 0;
@@ -267,508 +286,195 @@ static int cubrid_stmt_execute(pdo_stmt_t *stmt TSRMLS_DC)
 	return 1;
 }
 
-static char* _cubrid_dup_buf(char* src_buf,int size)
-{
-    int len=0;
-    char* temp_buf=NULL;
-
-    if(src_buf != NULL)
-    {
-        len = strlen(src_buf);
-    }
-    else
-    {
-        len =size;
-    }
-    if(len<=0)
-    {
-        return NULL;
-    }
-    temp_buf = (char*)emalloc(len+1);
-    if(NULL==temp_buf)
-    {
-      return NULL;
-    }
-    memset(temp_buf,0,len+1);
-    if(NULL!= src_buf)
-        memcpy(temp_buf,src_buf,len);   
-
-    return temp_buf;
-}
-
-static char* _cubrid_get_data_buf(int type,int num)
-{
-    switch(type)
-    {
-        case CCI_U_TYPE_BIGINT:
-            return _cubrid_dup_buf(NULL,sizeof(CUBRID_LONG_LONG)* (num+1));
-        case CCI_U_TYPE_FLOAT:
-            return  _cubrid_dup_buf(NULL,sizeof(float)* (num+1));
-        case CCI_U_TYPE_DOUBLE:     
-           return  _cubrid_dup_buf(NULL,sizeof(double)* (num+1));
-        case CCI_U_TYPE_BIT:
-        case CCI_U_TYPE_VARBIT:      
-           return  _cubrid_dup_buf(NULL,sizeof(T_CCI_BIT)* (num+1));
-        case CCI_U_TYPE_DATE:
-        case CCI_U_TYPE_TIME:
-        case CCI_U_TYPE_TIMESTAMP:
-        case CCI_U_TYPE_DATETIME:
-            return _cubrid_dup_buf(NULL,sizeof(T_CCI_DATE)* (num+1));  
-        case CCI_U_TYPE_INT:
-        case CCI_U_TYPE_SHORT:
-            return _cubrid_dup_buf(NULL,sizeof(int)* (num+1));  
-        default:
-           return  _cubrid_dup_buf(NULL,sizeof(void*)* (num+1));
-    } 
-}
-
-static char* cubrid_str2bit(char* str)
-{
-    int i=0,len=0,t=0;
-    char* buf=NULL;
-    int shift = 8;
-
-    if(str == NULL)
-        return NULL;
-    len = strlen(str);
-
-    if(0 == len%shift)
-        t =1;
-
-    buf = (char*)emalloc(len/shift+1+1);
-    memset(buf,0,len/shift+1+1);
-
-    for(i=0;i<len;i++)
-    {
-        if(str[len-i-1] == '1')
-        {
-            buf[len/shift - i/shift-t] |= (1<<(i%shift)); 
-        }
-        else if(str[len-i-1] == '0')
-        {
-        	//nothing
-        }
-        else
-        {
-            return NULL;
-        }
-    }
-    return buf;
-}
-
-static int cubrid_data_convert(void* data ,void** pSet,int type,int* indicator)
-{
-    T_CCI_BIT *bit_value = NULL;
-    T_CCI_DATE date = { 0, 0, 0, 0, 0, 0, 0 };
-    int err_code = 0;
-    
-    if(data == NULL)
-    {
-        php_printf("cubrid_data_convert failed.data=%s<br/>",(char*)data);
-        return 0;
-    }
-    if(strcmp(data,"NULL")==0)
-    {
-        *indicator=1;
-    }  
-    else
-    {
-        *indicator=0;
-    } 
-    
-    switch(type)
-    {
-        case CCI_U_TYPE_BIT:
-        case CCI_U_TYPE_VARBIT:  
-            if(*indicator==1)
-                break;
-            
-            bit_value = (T_CCI_BIT*)(pSet);
-            bit_value[0].buf = (char*)cubrid_str2bit((char*)data);
-            bit_value[0].size = strlen(bit_value[0].buf );          
-/*         
-        case CCI_U_TYPE_DATE:
-            if(*indicator==1)
-                break;
-            err_code = ut_str_to_date ((char*)data, &date);
-            if(err_code<0)
-                return 0;
-            memcpy((*pSet),&date,sizeof(T_CCI_DATE));
-            break;
-*/
-        default:
-            *pSet = data;
-            return CCI_U_TYPE_STRING;
-    }
-
-    return type;
-}
-static T_CCI_SET cubrid_create_set_by_param(zval *parameter,int type)
-{
-    T_CCI_SET set=NULL;
-    zval *z_array=0; 
-    int z_array_count=0,i=0,set_type;
-    int* indicator= NULL;     
-    char** data_set=NULL;
-    zval **z_item;
-    T_CCI_BIT* bit;
-
-    if(Z_TYPE_P(parameter) != IS_ARRAY)
-    {
-       php_printf("parameter not ARRAY.<br/>");
-       return NULL;
-    }
-
-    z_array=parameter;
-    z_array_count= zend_hash_num_elements(Z_ARRVAL_P(z_array));              
-
-    indicator= (int*)_cubrid_dup_buf(NULL,sizeof(int)* (z_array_count+1));
-    data_set = (char**)_cubrid_get_data_buf(type,z_array_count+1);
-
-    if(indicator == NULL || data_set==NULL)
-    {
-        php_printf("malloc failed.<br/>");
-        return NULL;
-    }
-    zend_hash_internal_pointer_reset(Z_ARRVAL_P(z_array)); 
-    for (i = 0; i < z_array_count; i ++) 
-    {
-        // 获取当前数据
-        zend_hash_get_current_data(Z_ARRVAL_P(z_array), (void**) &z_item);
-        convert_to_string_ex(z_item); 
-        set_type = cubrid_data_convert(Z_STRVAL_PP(z_item),(void**)&data_set[i] ,type,indicator+i);
-        if(set_type ==0)
-        {
-            efree(indicator);
-            efree(data_set);
-            php_printf("cubrid_data_convert failed.i=%d<br/>",i);
-            return 0;            
-        }
-
-         // 将数组中的内部指针向前移动一位
-        zend_hash_move_forward(Z_ARRVAL_P(z_array));
-    }   
-
-    if(0> cci_set_make(&set, set_type, z_array_count, data_set, (int*)indicator))
-    {
-        efree(indicator);
-        efree(data_set);
-        php_printf("cci_set_make failed.<br/>");
-        return 0;
-    }
-    if(CCI_U_TYPE_BIT == type || CCI_U_TYPE_VARBIT == type)
-    {
-        for(i=0;i<z_array_count;i++)
-        {  
-            if(indicator[i]==1)
-             continue;      
-            if(data_set[i] != NULL)
-            {
-                bit= (T_CCI_BIT*)&data_set[i];
-                efree(bit->buf);
-            }
-        }    
-    }
-    efree(indicator);
-    efree(data_set);    
-    
-    return set;
-}
-static int cubrid_type_pdo2cubrid(int pdo_type)
-{
-    switch (pdo_type) 
-    {   
-        case PDO_PARAM_LOB:
-            return CCI_U_TYPE_BIT;
-        default:
-            return CCI_U_TYPE_STRING;
-    }
-}
-static int cubrid_stmt_datatype_convert(int type)
-{
-    int u_type;
-    switch (type) 
-    {
-        case PDO_PARAM_INT:
-            u_type = CCI_U_TYPE_INT;
-
-            break;
-        case PDO_PARAM_STR:
-#if PDO_DRIVER_API >= 20080721
-        case PDO_PARAM_ZVAL:
-#endif        
-            u_type = CCI_U_TYPE_STRING; 
-            break;
-
-        case PDO_PARAM_LOB:
-            u_type = CCI_U_TYPE_BLOB;
-
-            break;
-        case PDO_PARAM_NULL:
-            u_type = CCI_U_TYPE_NULL;
-
-            break;
-        case PDO_PARAM_STMT:
-        default:
-            return CCI_U_TYPE_UNKNOWN;
-    }
-    return u_type;
-}
-
 static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data *param, 
 		enum pdo_param_event event_type TSRMLS_DC)
 {
-    pdo_cubrid_stmt *S = (pdo_cubrid_stmt *)stmt->driver_data;
+	pdo_cubrid_stmt *S = (pdo_cubrid_stmt *)stmt->driver_data;
 
-    char *bind_value = NULL, *bind_value_type = NULL;
-    int bind_value_len, bind_index,i=0;
+	char *bind_value = NULL, *bind_value_type = NULL;
+	int bind_value_len, bind_index;
 
-    T_CCI_U_TYPE u_type;
-    T_CCI_U_TYPE e_type;//element'datatype of set 
-    T_CCI_A_TYPE a_type;
+	T_CCI_U_TYPE u_type;
+	T_CCI_A_TYPE a_type;
 
     T_CCI_BIT *bit_value = NULL;
-    T_CCI_LOB lob = NULL;
+	T_CCI_LOB lob = NULL;
 
     php_stream *stm = NULL;
-    char* lobfile_name = NULL;
+	char* lobfile_name = NULL;
     char buf[CUBRID_LOB_READ_BUF_SIZE];
     pdo_uint64_t lob_start_pos = 0;
     size_t lob_read_size = 0;
-    
-    T_CCI_SET set;   
-    T_CCI_ERROR error;
-    int cubrid_retval = 0;
 
-    if (!S->stmt_handle) 
-    {
-        pdo_cubrid_error_stmt(stmt, CUBRID_ER_INVALID_STMT_HANDLE, NULL, NULL);
-        return 0;
-    }
+	T_CCI_ERROR error;
+	int cubrid_retval = 0;
 
-    if (!S->l_prepare || !param->is_param) 
-    {
-        return 1;	
-    }
+	if (!S->stmt_handle) {
+		pdo_cubrid_error_stmt(stmt, CUBRID_ER_INVALID_STMT_HANDLE, NULL, NULL);
+		return 0;
+	}
 
-    switch (event_type) 
-    {
-        case PDO_PARAM_EVT_EXEC_PRE:
-            if (param->paramno < 0 || param->paramno >= S->bind_num) 
-            {
-                pdo_cubrid_error_stmt(stmt, CUBRID_ER_INVALID_INDEX, NULL, NULL);
-                return 0;
-            }
+	if (!S->l_prepare || !param->is_param) {
+		return 1;	
+	}
 
-            bind_index = param->paramno + 1;
+	switch (event_type) {
+	case PDO_PARAM_EVT_EXEC_PRE:
+		if (param->paramno < 0 || param->paramno >= S->bind_num) {
+			pdo_cubrid_error_stmt(stmt, CUBRID_ER_INVALID_INDEX, NULL, NULL);
+			return 0;
+		}
 
-            /* driver_params: cubrid data type name (string), pass by driver_options */
-            if (!param->driver_params) 
-            {
-                /* if driver_params is null, use param->param_type */ 
-                switch (param->param_type) 
-                {
-                	case PDO_PARAM_INT:
-                		u_type = CCI_U_TYPE_INT;
+		bind_index = param->paramno + 1;
 
-                		break;
-                	case PDO_PARAM_STR:
+		/* driver_params: cubrid data type name (string), pass by driver_options */
+		if (!param->driver_params) {
+			/* if driver_params is null, use param->param_type */ 
+			switch (param->param_type) {
+			case PDO_PARAM_INT:
+				u_type = CCI_U_TYPE_INT;
+
+				break;
+			case PDO_PARAM_STR:
 #if PDO_DRIVER_API >= 20080721
-                	case PDO_PARAM_ZVAL:
-#endif        
-                        u_type = CCI_U_TYPE_STRING; 
-                        break;
+			case PDO_PARAM_ZVAL:
+#endif
+				u_type = CCI_U_TYPE_STRING;	
 
-                	case PDO_PARAM_LOB:
-                		u_type = CCI_U_TYPE_BLOB;
+				break;
+			case PDO_PARAM_LOB:
+				u_type = CCI_U_TYPE_BLOB;
 
-                		break;
-                	case PDO_PARAM_NULL:
-                		u_type = CCI_U_TYPE_NULL;
+				break;
+			case PDO_PARAM_NULL:
+				u_type = CCI_U_TYPE_NULL;
 
-                		break;
-                	case PDO_PARAM_STMT:
-                	default:
-                		pdo_cubrid_error_stmt(stmt, CUBRID_ER_NOT_SUPPORTED_TYPE, NULL, NULL);
-                		return 0;
-                }
-                if(Z_TYPE_P(param->parameter) == IS_ARRAY)
-                {
-                    e_type = cubrid_type_pdo2cubrid(u_type);
-                    u_type = CCI_U_TYPE_SET;                    
-                }
-            } 
-            else 
-            {
-                convert_to_string(param->driver_params);
-                bind_value_type = Z_STRVAL_P(param->driver_params);
-                e_type = get_cubrid_u_type_by_name(bind_value_type);
-                u_type = e_type;
-                if(Z_TYPE_P(param->parameter) == IS_ARRAY)
-                {
-                   u_type = CCI_U_TYPE_SET;
-                }
-                if(u_type == CCI_U_TYPE_ENUM)
-                {
-                    u_type = cubrid_stmt_datatype_convert(param->param_type);
-                }
-                if (u_type == CCI_U_TYPE_UNKNOWN) 
-                {
-                	pdo_cubrid_error_stmt(stmt, CUBRID_ER_NOT_SUPPORTED_TYPE, NULL, NULL);
-                	return 0;
-                }
-            }
+				break;
+			case PDO_PARAM_STMT:
+			default:
+				pdo_cubrid_error_stmt(stmt, CUBRID_ER_NOT_SUPPORTED_TYPE, NULL, NULL);
+				return 0;
+			}
+		} else {
+			convert_to_string(param->driver_params);
+			bind_value_type = Z_STRVAL_P(param->driver_params);
 
-            if (u_type == CCI_U_TYPE_NULL || Z_TYPE_P(param->parameter) == IS_NULL) 
-            {
-                cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, CCI_A_TYPE_STR, NULL, u_type, 0);
-            } 
-            else
-            {
-                if (u_type == CCI_U_TYPE_BLOB || u_type == CCI_U_TYPE_CLOB) 
-                {
-                    if (Z_TYPE_P(param->parameter) == IS_RESOURCE) 
-                    {
-                        php_stream_from_zval_no_verify(stm, &param->parameter);
-                        if (!stm) 
-                        {
-                        	php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected a stream resource when param type is LOB\n");
-                        	return 0;
-                        }
-                    } 
-                    else
-                    {
-                        /* file name */
-                        convert_to_string(param->parameter);
-                        lobfile_name = Z_STRVAL_P(param->parameter);
+			u_type = get_cubrid_u_type_by_name(bind_value_type);
 
-                        if (!(stm = php_stream_open_wrapper(lobfile_name, "r", REPORT_ERRORS, NULL))) 
-                        {
-                        	return 0;
-                        }
-                    }
-                } 
-                else if(u_type == CCI_U_TYPE_SET)
-                {
-                    set = cubrid_create_set_by_param(param->parameter,e_type);
-                    if(set == NULL)
-                   {
-                       return 0;
-                   }    
-                }
-                else 
-                {
-            		convert_to_string(param->parameter);
-                }
+			if (u_type == CCI_U_TYPE_UNKNOWN || u_type == CCI_U_TYPE_SET || 
+				u_type == CCI_U_TYPE_MULTISET || u_type == CCI_U_TYPE_SEQUENCE) {
+				pdo_cubrid_error_stmt(stmt, CUBRID_ER_NOT_SUPPORTED_TYPE, NULL, NULL);
+				return 0;
+			}
+		}
 
-                switch (u_type) 
-                {
-                    case CCI_U_TYPE_BLOB:
-                    		a_type = CCI_A_TYPE_BLOB;
-                    		break;
-                    case CCI_U_TYPE_CLOB:
-                    		a_type = CCI_A_TYPE_CLOB;
-                    		break;
-                    case CCI_U_TYPE_BIT:
-                    case CCI_U_TYPE_VARBIT:
-                    		a_type = CCI_A_TYPE_BIT;
-                    		break;
-                    case CCI_U_TYPE_SET:
-                    case CCI_U_TYPE_MULTISET:
-                    case CCI_U_TYPE_SEQUENCE:
-                     		a_type = CCI_A_TYPE_SET;
-                    		break;                               
-                    default:
-                    		a_type = CCI_A_TYPE_STR;
-                    		break;
-                }
+		if (u_type == CCI_U_TYPE_NULL || Z_TYPE_P(param->parameter) == IS_NULL) {
+			cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, CCI_A_TYPE_STR, NULL, u_type, 0);
+		} else {
+			if (u_type == CCI_U_TYPE_BLOB || u_type == CCI_U_TYPE_CLOB) {
+				if (Z_TYPE_P(param->parameter) == IS_RESOURCE) {
+					php_stream_from_zval_no_verify(stm, &param->parameter);
+					if (!stm) {
+						php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected a stream resource when param type is LOB\n");
+						return 0;
+					}
+				} else {
+					/* file name */
+					convert_to_string(param->parameter);
+					lobfile_name = Z_STRVAL_P(param->parameter);
 
-                if (u_type == CCI_U_TYPE_BLOB || u_type == CCI_U_TYPE_CLOB) 
-                {
-                    if ((cubrid_retval = cubrid_lob_new(S->H->conn_handle, &lob, u_type, &error)) < 0)
-                    {
-                        pdo_cubrid_error_stmt(stmt, cubrid_retval, &error, NULL);
+					if (!(stm = php_stream_open_wrapper(lobfile_name, "r", REPORT_ERRORS, NULL))) {
+						return 0;
+					}
+				}
+			} else {
+				convert_to_string(param->parameter);
+			}
 
-                        if (lobfile_name)
-                        {
-                        	php_stream_close(stm);
-                        }
+			bind_value = Z_STRVAL_P(param->parameter);
+			bind_value_len = Z_STRLEN_P(param->parameter);
 
-                        return 0;
-                    }
+			switch (u_type) {
+			case CCI_U_TYPE_BLOB:
+					a_type = CCI_A_TYPE_BLOB;
+					break;
+			case CCI_U_TYPE_CLOB:
+					a_type = CCI_A_TYPE_CLOB;
+					break;
+			case CCI_U_TYPE_BIT:
+			case CCI_U_TYPE_VARBIT:
+					a_type = CCI_A_TYPE_BIT;
+					break;
+			default:
+					a_type = CCI_A_TYPE_STR;
+					break;
+			}
 
-                    while (!php_stream_eof(stm))
-                    { 
-                        lob_read_size = php_stream_read(stm, buf, CUBRID_LOB_READ_BUF_SIZE); 
+			if (u_type == CCI_U_TYPE_BLOB || u_type == CCI_U_TYPE_CLOB) {
+				if ((cubrid_retval = cubrid_lob_new(S->H->conn_handle, &lob, u_type, &error)) < 0) {
+					pdo_cubrid_error_stmt(stmt, cubrid_retval, &error, NULL);
 
-                        if ((cubrid_retval = cubrid_lob_write(S->H->conn_handle, lob, u_type, 
-                        				lob_start_pos, lob_read_size, buf, &error)) < 0) 
-                        {
-                            pdo_cubrid_error_stmt(stmt, cubrid_retval, &error, NULL);
-                            php_stream_close(stm);
+					if (lobfile_name) {
+						php_stream_close(stm);
+					}
 
-                            return 0;
-                        }        
+					return 0;
+				}
 
-                        lob_start_pos += lob_read_size;
-                    }
-                	
-                    if (lobfile_name) 
-                    {
-                    	php_stream_close(stm);
-                    }
+				while (!php_stream_eof(stm)) { 
+					lob_read_size = php_stream_read(stm, buf, CUBRID_LOB_READ_BUF_SIZE); 
 
-                    cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, a_type, (void *) lob, u_type, CCI_BIND_PTR); 
+					if ((cubrid_retval = cubrid_lob_write(S->H->conn_handle, lob, u_type, 
+									lob_start_pos, lob_read_size, buf, &error)) < 0) {
+						pdo_cubrid_error_stmt(stmt, cubrid_retval, &error, NULL);
+						php_stream_close(stm);
 
-                    S->lob = new_cubrid_lob();
-                    S->lob->lob = lob;
-                    S->lob->type = u_type;
-                } 
-                else if (u_type == CCI_U_TYPE_BIT) 
-                {
-                    bind_value = Z_STRVAL_P(param->parameter);
-                    bind_value_len = Z_STRLEN_P(param->parameter);
-                    bit_value = (T_CCI_BIT *) emalloc(sizeof(T_CCI_BIT));
-                    bit_value->size = bind_value_len;
-                    bit_value->buf = bind_value;
+						return 0;
+					}        
 
-                    cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, a_type, (void *) bit_value, u_type, 0);
+					lob_start_pos += lob_read_size;
+				}
+					
+				if (lobfile_name) {
+					php_stream_close(stm);
+				}
 
-                    efree(bit_value);
-                } 
-                else if(u_type == CCI_U_TYPE_SET)
-                {
-                    cubrid_retval = cci_bind_param (S->stmt_handle, bind_index, a_type,set, u_type, 0);    
-                    cci_set_free(set);
-                }
-                else 
-                {
-                    bind_value = Z_STRVAL_P(param->parameter);
-                    cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, a_type, bind_value, u_type, 0);
-                } 
-            }
+				cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, a_type, (void *) lob, u_type, CCI_BIND_PTR); 
 
-            if (cubrid_retval != 0 || !S->l_bind) 
-            {
-                pdo_cubrid_error_stmt(stmt, cubrid_retval, NULL, NULL);
-                return 0;
-            }
+				S->lob = new_cubrid_lob();
+				S->lob->lob = lob;
+				S->lob->type = u_type;
+			} else if (u_type == CCI_U_TYPE_BIT) {
+				bit_value = (T_CCI_BIT *) emalloc(sizeof(T_CCI_BIT));
+				bit_value->size = bind_value_len;
+				bit_value->buf = bind_value;
 
-            S->l_bind[param->paramno] = 1;
+				cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, a_type, (void *) bit_value, u_type, 0);
 
-            break;
+				efree(bit_value);
+			} else {
+				cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, a_type, bind_value, u_type, 0);
+			} 
+		}
+
+		if (cubrid_retval != 0 || !S->l_bind) {
+			pdo_cubrid_error_stmt(stmt, cubrid_retval, NULL, NULL);
+			return 0;
+		}
+
+		S->l_bind[param->paramno] = 1;
+		
+		break;
 	case PDO_PARAM_EVT_EXEC_POST:
-            if (S->lob)
-            {
-                if (S->lob->lob) 
-                {
-                	cubrid_lob_free(S->lob->lob, S->lob->type);
-                }
-                efree(S->lob);
-                S->lob = NULL;
-            }
+		if (S->lob) {
+			if (S->lob->lob) {
+				cubrid_lob_free(S->lob->lob, S->lob->type);
+			}
+			efree(S->lob);
+			S->lob = NULL;
+		}
 
-            break;
+		break;
 	case PDO_PARAM_EVT_ALLOC:
 	case PDO_PARAM_EVT_FREE:
 	case PDO_PARAM_EVT_FETCH_PRE:
@@ -1216,7 +922,7 @@ static int type2str(T_CCI_COL_INFO * column_info, char *type_name, int type_name
 {
     char buf[64];
 
-    switch (CCI_GET_COLLECTION_DOMAIN(column_info->ext_type)) {
+    switch (CCI_GET_COLLECTION_DOMAIN(column_info->type)) {
     case CCI_U_TYPE_UNKNOWN:
 		snprintf(buf, sizeof(buf), "unknown");
 	break;
@@ -1289,20 +995,17 @@ static int type2str(T_CCI_COL_INFO * column_info, char *type_name, int type_name
     case CCI_U_TYPE_CLOB:
         snprintf(buf, sizeof(buf), "clob");
         break;
-	case CCI_U_TYPE_ENUM:
-		snprintf(buf, sizeof(buf), "enum");
-		break;
     default:
 		/* should not enter here */
 		snprintf(buf, sizeof(buf), "[unknown]");
 		return FAILURE;
     }
 
-    if (CCI_IS_SET_TYPE(column_info->ext_type)) {
+    if (CCI_IS_SET_TYPE(column_info->type)) {
 		snprintf(type_name, type_name_len, "set(%s)", buf);
-    } else if (CCI_IS_MULTISET_TYPE(column_info->ext_type)) {
+    } else if (CCI_IS_MULTISET_TYPE(column_info->type)) {
 		snprintf(type_name, type_name_len, "multiset(%s)", buf);
-    } else if (CCI_IS_SEQUENCE_TYPE(column_info->ext_type)) {
+    } else if (CCI_IS_SEQUENCE_TYPE(column_info->type)) {
 		snprintf(type_name, type_name_len, "sequence(%s)", buf);
     } else {
 		snprintf(type_name, type_name_len, "%s", buf);
