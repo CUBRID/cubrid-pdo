@@ -71,14 +71,6 @@ PHP_MINIT_FUNCTION(pdo_cubrid)
 {
 	cci_init();
 
-	REGISTER_PDO_CLASS_CONST_LONG("CUBRID_ATTR_ISOLATION_LEVEL", PDO_CUBRID_ATTR_ISOLATION_LEVEL);
-	REGISTER_PDO_CLASS_CONST_LONG("CUBRID_ATTR_LOCK_TIMEOUT", PDO_CUBRID_ATTR_LOCK_TIMEOUT);
-	REGISTER_PDO_CLASS_CONST_LONG("CUBRID_ATTR_MAX_STRING_LENGTH", PDO_CUBRID_ATTR_MAX_STRING_LENGTH);
-
-    REGISTER_PDO_CLASS_CONST_LONG("TRAN_REP_CLASS_COMMIT_INSTANCE", TRAN_REP_CLASS_COMMIT_INSTANCE);
-    REGISTER_PDO_CLASS_CONST_LONG("TRAN_REP_CLASS_REP_INSTANCE", TRAN_REP_CLASS_REP_INSTANCE);
-    REGISTER_PDO_CLASS_CONST_LONG("TRAN_SERIALIZABLE", TRAN_SERIALIZABLE);
-
 	REGISTER_PDO_CLASS_CONST_LONG("CUBRID_SCH_TABLE", CUBRID_SCH_TABLE);
 	REGISTER_PDO_CLASS_CONST_LONG("CUBRID_SCH_VIEW", CUBRID_SCH_VIEW);
 	REGISTER_PDO_CLASS_CONST_LONG("CUBRID_SCH_QUERY_SPEC", CUBRID_SCH_QUERY_SPEC);
@@ -113,18 +105,11 @@ PHP_MSHUTDOWN_FUNCTION(pdo_cubrid)
 
 PHP_MINFO_FUNCTION(pdo_cubrid)
 {
-    int major, minor, patch;
-    char info[128];
-
-    cci_get_version(&major, &minor, &patch);
-
-    snprintf(info, sizeof(info), "%d.%d.%d", major, minor, patch);
-
-    php_info_print_table_start();
-    php_info_print_table_header(2, "pdo_cubrid support", "enabled");
+	php_info_print_table_start();
+	php_info_print_table_header(2, "pdo_cubrid support", "enabled");
     php_info_print_table_row(2, "Client API version", PDO_CUBRID_VERSION);
-    php_info_print_table_row(2, "CCI Version", info);
-    php_info_print_table_end();
+    php_info_print_table_row(2, "Supported CUBRID server", "8.3.1");
+	php_info_print_table_end();
 }
 
 

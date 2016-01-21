@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pdo_cubrid", "pdo_cubrid.vcproj", "{F2F581A2-AF60-41DC-9520-6FD3B9450322}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cas_cci", "cci-src\win\cas_cci\cas_cci.vcproj", "{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_TS|Win32 = Debug_TS|Win32
@@ -39,26 +37,6 @@ Global
 		{F2F581A2-AF60-41DC-9520-6FD3B9450322}.Release|Win32.Build.0 = Release|Win32
 		{F2F581A2-AF60-41DC-9520-6FD3B9450322}.Release|x64.ActiveCfg = Release|x64
 		{F2F581A2-AF60-41DC-9520-6FD3B9450322}.Release|x64.Build.0 = Release|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Debug_TS|Win32.ActiveCfg = Debug|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Debug_TS|Win32.Build.0 = Debug|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Debug_TS|x64.ActiveCfg = Debug|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Debug_TS|x64.Build.0 = Debug|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Debug|Win32.ActiveCfg = Debug|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Debug|Win32.Build.0 = Debug|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Debug|x64.ActiveCfg = Debug|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Debug|x64.Build.0 = Debug|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release_NTS|Win32.ActiveCfg = Release|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release_NTS|Win32.Build.0 = Release|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release_NTS|x64.ActiveCfg = Release|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release_NTS|x64.Build.0 = Release|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release_TS|Win32.ActiveCfg = Release|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release_TS|Win32.Build.0 = Release|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release_TS|x64.ActiveCfg = Release|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release_TS|x64.Build.0 = Release|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release|Win32.ActiveCfg = Release|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release|Win32.Build.0 = Release|Win32
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release|x64.ActiveCfg = Release|x64
-		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -71,6 +71,7 @@ static const DB_ERROR_INFO db_error[] = {
     {CUBRID_ER_PARAM_NOT_BIND, "Param not bind"},
     {CUBRID_ER_INVALID_INDEX, "Invalid index number"},
     {CUBRID_ER_INVALID_CONN_STR, "Invalid connection string"},
+	{CUBRID_ER_ROLLBACK_IN_AUTOCOMMIT, "Rollback fails when set auto commit"},
 	{CUBRID_ER_EXEC_TIMEOUT, "Exec query timeout"},
 	{CUBRID_ER_INVALID_CURSOR_POS, "Invalid cursor position (forward only)"},
 };
@@ -119,21 +120,21 @@ int _pdo_cubrid_error(pdo_dbh_t *dbh, pdo_stmt_t *stmt, int err_code, T_CCI_ERRO
 			real_err_code = 0;
 			real_err_msg = "Unknown DBMS error";
 		}
-	} else if (err_code < CUBRID_ER_END) {
+	} else if (err_code < -3000) {
 		err_facility_msg = "UNKNOWN";
 
 		real_err_code = -1;
 		real_err_msg = NULL;
 	} else{
-		if (err_code > CAS_ER_IS) {
-			err_facility_msg = "CAS";
-		} else if (err_code > CCI_ER_END) {
+		if (err_code > -1000) {
 			err_facility_msg = "CCI";
-		} else if (err_code > CUBRID_ER_END) {
+		} else if (err_code > -2000) {
+			err_facility_msg = "CAS";
+		} else if (err_code > -3000) {
 			err_facility_msg = "CLIENT";
 		}
 
-		if (err_code > CCI_ER_END) {
+		if (err_code > -2000) {
 			cubrid_retval = cci_get_err_msg(err_code, err_buf, sizeof(err_buf));
 		} else {
 			cubrid_retval = cubrid_get_err_msg(err_code, err_buf, sizeof(err_buf));
@@ -194,16 +195,8 @@ static int cubrid_handle_closer(pdo_dbh_t *dbh TSRMLS_DC)
 {
     pdo_cubrid_db_handle *H = (pdo_cubrid_db_handle *)dbh->driver_data;
     T_CCI_ERROR error;
-	int i;
 
 	if (H) {
-		for (i = 0; i < H->stmt_count; i++) {
-			if (H->stmt_list[i]) {
-				H->stmt_list[i]->stmt_handle = 0;
-				H->stmt_list[i]->H = NULL;
-			}
-		}
-
 		if (H->conn_handle) {
 			cci_disconnect(H->conn_handle, &error);
 			H->conn_handle = 0;
@@ -212,10 +205,6 @@ static int cubrid_handle_closer(pdo_dbh_t *dbh TSRMLS_DC)
 		if (H->einfo.errmsg) {
 			pefree(H->einfo.errmsg, dbh->is_persistent);
 			H->einfo.errmsg = NULL;
-		}
-
-		if (H->stmt_count) {
-			efree(H->stmt_list);
 		}
 
 		pefree(H, dbh->is_persistent);
@@ -242,7 +231,7 @@ static int cubrid_handle_preparer(pdo_dbh_t *dbh, const char *sql, long sql_len,
 	stmt->driver_data = S;
 	stmt->methods = &cubrid_stmt_methods;
 
-	S->lob = NULL;
+	S->blob = NULL;
 
 	if (pdo_attr_lval(driver_options, PDO_ATTR_CURSOR, PDO_CURSOR_FWDONLY TSRMLS_CC) == PDO_CURSOR_SCROLL) {
 		S->cursor_type = PDO_CURSOR_SCROLL;
@@ -269,10 +258,7 @@ static int cubrid_handle_preparer(pdo_dbh_t *dbh, const char *sql, long sql_len,
 
 		return 0;
 	}
-       if(H->query_timeout != -1 && H->query_timeout != 0)
-       {
-           cci_set_query_timeout(stmt_handle,H->query_timeout*1000);
-       }
+
 	S->stmt_handle = stmt_handle;
 	S->bind_num = cci_get_bind_num(stmt_handle);
 
@@ -283,10 +269,8 @@ static int cubrid_handle_preparer(pdo_dbh_t *dbh, const char *sql, long sql_len,
 		}
 
 		if ((cubrid_retval = cci_get_param_info(stmt_handle, &(S->param_info), &error)) < 0) {
-			if (cubrid_retval != CAS_ER_NOT_IMPLEMENTED) {
-				pdo_cubrid_error_stmt(stmt, cubrid_retval, &error, NULL);
-				return 0;
-			}
+			pdo_cubrid_error_stmt(stmt, cubrid_retval, &error, NULL);
+			return 0;
 		}
     }
 
@@ -295,10 +279,6 @@ static int cubrid_handle_preparer(pdo_dbh_t *dbh, const char *sql, long sql_len,
 	if (nsql) {
 		efree(nsql);
 	}
-
-	H->stmt_list = erealloc(H->stmt_list, (H->stmt_count + 1) * sizeof(pdo_cubrid_stmt *));
-	H->stmt_list[H->stmt_count] = S;
-	H->stmt_count++;
 
 	return 1;
 }
@@ -311,6 +291,8 @@ static long cubrid_handle_doer(pdo_dbh_t *dbh, const char *sql, long sql_len TSR
 	char exec_flag = CCI_EXEC_QUERY_ALL;
     T_CCI_ERROR error;
 
+	int query_time_msec = 0;
+	int cubrid_retval = 0;
 	long ret = 0;
 
 	if ((stmt_handle = cci_prepare(H->conn_handle, (char *)sql, 0, &error)) < 0) {
@@ -318,16 +300,41 @@ static long cubrid_handle_doer(pdo_dbh_t *dbh, const char *sql, long sql_len TSR
 		return -1;
 	}
 
-       if(H->query_timeout != -1&& H->query_timeout != 0)
-       {
-           cci_set_query_timeout(stmt_handle,H->query_timeout*1000);
-       }
+	if (H->query_timeout != -1) {
+		exec_flag = CCI_EXEC_THREAD;
+	}
 
     ret = cci_execute(stmt_handle, exec_flag, 0, &error);
 
+	if (H->query_timeout != -1 && ret == CCI_ER_THREAD_RUNNING) {
+		do {
+			SLEEP_MILISEC(0, EXEC_CHECK_INTERVAL);
+			query_time_msec += EXEC_CHECK_INTERVAL;
+
+			ret = cci_get_thread_result(H->conn_handle, &error);
+		} while (ret == CCI_ER_THREAD_RUNNING && query_time_msec < H->query_timeout * 1000);
+
+		if (ret == CCI_ER_THREAD_RUNNING) {
+			pdo_cubrid_error(dbh, CUBRID_ER_EXEC_TIMEOUT, NULL, NULL);
+			cci_cancel(H->conn_handle);
+			return -1;
+		}
+	}
+
 	if (ret < 0) {
+		if (dbh->auto_commit) {
+			cci_end_tran(H->conn_handle, CCI_TRAN_ROLLBACK, &error);
+		}
+
 		pdo_cubrid_error(dbh, ret, &error, NULL);
 		return -1;
+	} else {
+		if (dbh->auto_commit) {
+			if ((cubrid_retval = cci_end_tran(H->conn_handle, CCI_TRAN_COMMIT, &error)) < 0) {
+				pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
+				return -1;
+			}
+		}
 	}
 
 	return ret;
@@ -336,21 +343,37 @@ static long cubrid_handle_doer(pdo_dbh_t *dbh, const char *sql, long sql_len TSR
 static int cubrid_handle_quoter(pdo_dbh_t *dbh, const char *unquoted, int unquotedlen, 
 		char **quoted, int *quotedlen, enum pdo_param_type paramtype TSRMLS_DC)
 {
-	pdo_cubrid_db_handle *H = (pdo_cubrid_db_handle *)dbh->driver_data;
+	const char *s1;
+	char *s2;
+    int i;
 
-	T_CCI_ERROR error;
-	int ret = 0;
-	
-	*quoted = (char *) emalloc(2 * unquotedlen + 18);
+	*quotedlen = 0;
 
-	if ((ret = cci_escape_string(H->conn_handle, *quoted+1, unquoted, unquotedlen, &error)) < 0) {
-		pdo_cubrid_error(dbh, ret, &error, NULL);
-		efree(*quoted);
+	s1 = unquoted;
+    for (i = 0; i < unquotedlen; i++) {
+		/* cubrid only need to escape single quote */
+		if (s1[i] == '\'') {
+			(*quotedlen) += 2;
+		} else {
+			(*quotedlen)++;
+		}
+    }
+
+	if (*quotedlen == unquotedlen) {
 		return 0;
 	}
-	*quotedlen = ret;
-	(*quoted)[0] =(*quoted)[++*quotedlen] = '\'';	
-	(*quoted)[++*quotedlen] = '\0';
+
+    *quoted = safe_emalloc((*quotedlen) + 1, sizeof(char), 0);
+
+    s2 = *quoted;
+    for (i = 0; i < unquotedlen; i++) {
+		if (s1[i] == '\'') {
+			*s2++ = '\'';
+		}
+
+		*s2++ = s1[i]; 
+    }
+    *s2 = '\0';
 
 	return 1;
 }
@@ -362,19 +385,14 @@ static int cubrid_handle_begin(pdo_dbh_t *dbh TSRMLS_DC)
 
 	pdo_cubrid_db_handle *H = (pdo_cubrid_db_handle *)dbh->driver_data;
 
-	if (H->auto_commit == CCI_AUTOCOMMIT_TRUE) {
-		if ((cubrid_retval = cci_set_autocommit(H->conn_handle, CCI_AUTOCOMMIT_FALSE)) < 0) {
-			pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-			return 0;
-		}
-
+	if (H->auto_commit) {
 		dbh->auto_commit = 0;
-	} else {
-		if ((cubrid_retval = cci_end_tran(H->conn_handle, CCI_TRAN_COMMIT, &error)) < 0) {
-			pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-			return 0;
-		}
 	}
+
+	if ((cubrid_retval = cci_end_tran(H->conn_handle, CCI_TRAN_COMMIT, &error)) < 0) {
+		pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
+		return 0;
+    }
 
 	return 1;
 }
@@ -386,19 +404,12 @@ static int cubrid_handle_commit(pdo_dbh_t *dbh TSRMLS_DC)
 	int cubrid_retval = 0;
     T_CCI_ERROR error;
 
+	dbh->auto_commit = H->auto_commit;
+
 	if ((cubrid_retval = cci_end_tran(H->conn_handle, CCI_TRAN_COMMIT, &error)) < 0) {
 		pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
 		return 0;
     }
-
-	if (H->auto_commit == CCI_AUTOCOMMIT_TRUE) {
-		if ((cubrid_retval = cci_set_autocommit(H->conn_handle, CCI_AUTOCOMMIT_TRUE)) < 0) {
-			pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-			return 0;
-		}
-
-		dbh->auto_commit = 1;
-	}
 
 	return 1;
 }
@@ -410,19 +421,12 @@ static int cubrid_handle_rollback(pdo_dbh_t *dbh TSRMLS_DC)
 	int cubrid_retval = 0;
     T_CCI_ERROR error;
 
+	dbh->auto_commit = H->auto_commit;
+
 	if ((cubrid_retval = cci_end_tran(H->conn_handle, CCI_TRAN_ROLLBACK, &error)) < 0) {
 		pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
 		return 0;
     }
-
-	if (H->auto_commit == CCI_AUTOCOMMIT_TRUE) {
-		if ((cubrid_retval = cci_set_autocommit(H->conn_handle, CCI_AUTOCOMMIT_TRUE)) < 0) {
-			pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-			return 0;
-		}
-
-		dbh->auto_commit = 1;
-	}
 
 	return 1;
 }
@@ -444,11 +448,6 @@ static int pdo_cubrid_set_attribute(pdo_dbh_t *dbh, long attr, zval *val TSRMLS_
 					return 0;
 				}
 			}
-			
-			if ((cubrid_retval = cci_set_autocommit(H->conn_handle, Z_BVAL_P(val))) < 0) {
-				pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-				return 0;	
-			}
 
 			H->auto_commit = Z_BVAL_P(val);
 			dbh->auto_commit = Z_BVAL_P(val);
@@ -461,22 +460,8 @@ static int pdo_cubrid_set_attribute(pdo_dbh_t *dbh, long attr, zval *val TSRMLS_
 			if ((Z_LVAL_P(val) == 0) || (Z_LVAL_P(val) < 0 && Z_LVAL_P(val) != -1)) {
 				return 0;
 			}
-
+			
 			H->query_timeout = Z_LVAL_P(val);
-		}
-
-		return 1;
-	case PDO_CUBRID_ATTR_ISOLATION_LEVEL:
-		if ((cubrid_retval = cci_set_isolation_level(H->conn_handle, Z_LVAL_P(val), &error)) < 0) {
-			pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-			return 0;	
-		}
-
-		return 1;
-	case PDO_CUBRID_ATTR_LOCK_TIMEOUT:
-		if ((cubrid_retval = cci_set_lock_timeout(H->conn_handle, Z_LVAL_P(val), &error)) < 0) {
-			pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-			return 0;	
 		}
 
 		return 1;
@@ -490,8 +475,6 @@ static int pdo_cubrid_set_attribute(pdo_dbh_t *dbh, long attr, zval *val TSRMLS_
 static int pdo_cubrid_get_attribute(pdo_dbh_t *dbh, long attr, zval *return_value TSRMLS_DC)
 {
 	pdo_cubrid_db_handle *H = (pdo_cubrid_db_handle *)dbh->driver_data;
-	int cubrid_retval = 0, param_value;
-	T_CCI_ERROR error;
 
 	if (!H->conn_handle) {
 		pdo_cubrid_error(dbh, CUBRID_ER_INVALID_CONN_HANDLE, NULL, NULL);
@@ -519,7 +502,6 @@ static int pdo_cubrid_get_attribute(pdo_dbh_t *dbh, long attr, zval *return_valu
 	}
 		break;
 	case PDO_ATTR_SERVER_VERSION:
-	case PDO_ATTR_SERVER_INFO:
 	{
 		char buf[64];
 		cci_get_db_version(H->conn_handle, buf, sizeof(buf));
@@ -527,33 +509,14 @@ static int pdo_cubrid_get_attribute(pdo_dbh_t *dbh, long attr, zval *return_valu
 		ZVAL_STRING(return_value, buf, 1);
 	}
 		break;
-	case PDO_CUBRID_ATTR_ISOLATION_LEVEL:
-		if ((cubrid_retval = cci_get_db_parameter(H->conn_handle, CCI_PARAM_ISOLATION_LEVEL, &param_value, &error)) < 0) {
-			pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-			return 0;	
-		}
+	case PDO_ATTR_SERVER_INFO:
+	{
+		char info[256];	
+		snprintf(info, sizeof(info), "db_parameter {isolation_level: %d lock_timeout: %d max_string_len: %d auto_commit: %d}", 
+				H->isolation_level, H->lock_timeout, H->max_string_len, dbh->auto_commit);
 
-		ZVAL_LONG(return_value, param_value);
-
-		break;
-	case PDO_CUBRID_ATTR_LOCK_TIMEOUT:
-		if ((cubrid_retval = cci_get_db_parameter(H->conn_handle, CCI_PARAM_LOCK_TIMEOUT, &param_value, &error)) < 0) {
-			pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-			return 0;	
-		}
-
-		ZVAL_LONG(return_value, param_value);
-
-		break;
-	case PDO_CUBRID_ATTR_MAX_STRING_LENGTH:
-		if ((cubrid_retval = cci_get_db_parameter(H->conn_handle, CCI_PARAM_MAX_STRING_LENGTH, &param_value, &error)) < 0) {
-			//pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-			//return 0;	
-			param_value=0;
-		}
-
-		ZVAL_LONG(return_value, param_value);
-
+		ZVAL_STRING(return_value, info, 1);
+	}
 		break;
 	default:
 		return 0;
@@ -566,22 +529,64 @@ static char *pdo_cubrid_last_insert_id(pdo_dbh_t *dbh, const char *name, unsigne
 {
 	pdo_cubrid_db_handle *H = (pdo_cubrid_db_handle *)dbh->driver_data;
 
+	char sql_stmt[256];
     int cubrid_retval = 0;
+    int request_handle = 0;
+
+    char *buf_col, *buf_val;
+    int ind_col, ind_val;
     T_CCI_ERROR error;
 
-	char *last_id = NULL;
 	char *id = NULL;
+	*len = 0;
 
-	if ((cubrid_retval = cci_get_last_insert_id(H->conn_handle, &last_id, &error)) < 0) {
-		pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
+	snprintf(sql_stmt, sizeof(sql_stmt), 
+			"select att_name, current_val from db_serial where class_name='%s' and started=1", name);
+
+	if ((request_handle = cci_prepare(H->conn_handle, sql_stmt, 0, &error)) < 0) {
 		return NULL;
-	}
+    }
 
-	if (last_id == NULL) {
-		*len = 0;
-	} else {
-		*len = strlen(last_id);
-		id = estrdup(last_id);
+	if ((cubrid_retval = cci_execute(request_handle, 0, 0, &error)) < 0) {
+		goto cleanup;
+    }
+
+    while (1) {
+		cubrid_retval = cci_cursor(request_handle, 1, CCI_CURSOR_CURRENT, &error);
+		if (cubrid_retval < 0 && cubrid_retval != CCI_ER_NO_MORE_DATA) {
+			goto cleanup;
+		}
+
+		if (cubrid_retval == CCI_ER_NO_MORE_DATA) {
+			cubrid_retval = 0;
+			break;
+		}
+
+		if ((cubrid_retval = cci_fetch(request_handle, &error)) < 0) {
+			goto cleanup;
+		}
+
+		if ((cubrid_retval = cci_get_data(request_handle, 1, CCI_A_TYPE_STR, &buf_col, &ind_col)) < 0) {
+			goto cleanup;
+		}
+
+		if ((cubrid_retval = cci_get_data(request_handle, 2, CCI_A_TYPE_STR, &buf_val, &ind_val)) < 0) {
+			goto cleanup;
+		}
+
+		if (ind_val != -1) {
+			if (id) {
+				efree(id);
+			}
+
+			id = estrndup(buf_val, ind_val);
+			*len = ind_val;
+		}
+    }
+
+cleanup:
+	if (request_handle) {
+		cci_close_req_handle(request_handle);
 	}
 
 	return id;
@@ -768,8 +773,6 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 		{ "dbname", "", 0 }
     };
 
-	char connect_url[2048] = {'\0'};
-
 	vars_size = sizeof(vars)/sizeof(vars[0]);
 
     H = pecalloc(1, sizeof(pdo_cubrid_db_handle), dbh->is_persistent);
@@ -777,72 +780,28 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 
     H->einfo.errcode = 0;
     H->einfo.errmsg = NULL;
+	H->auto_commit = 1;
 
     if (php_pdo_parse_data_source(dbh->data_source, dbh->data_source_len, vars, vars_size) != vars_size) {
 		pdo_cubrid_error(dbh, CUBRID_ER_INVALID_CONN_STR, NULL, NULL);
 		goto cleanup;
 	}
-
-	host = vars[0].optval;
-	if(vars[1].optval) {
+    
+    host = vars[0].optval;
+    if(vars[1].optval) {
 		port = atoi(vars[1].optval);
-	}
-	dbname = vars[2].optval;
+    }
+    dbname = vars[2].optval;
 
-	snprintf(connect_url, sizeof(connect_url), "cci:CUBRID:%s:%d:%s:%s:%s:", host, (int)port, dbname, dbh->username, dbh->password);
-
-	if (driver_options)
-	{
-		HashPosition position;
-		HashTable *ht = Z_ARRVAL_P(driver_options);
-		zval **data = NULL;
-		int first = 1;
-		char temp_buffer[1024]={'\0'};
-
-		for (zend_hash_internal_pointer_reset_ex(ht, &position);
-			zend_hash_get_current_data_ex(ht, (void**) &data, &position) == SUCCESS;
-			zend_hash_move_forward_ex(ht, &position)) {
-				char *key = NULL;
-				uint  klen;
-				ulong index;
-
-				if (Z_TYPE_PP(data) != IS_STRING) {
-					pdo_cubrid_error(dbh, CUBRID_ER_INVALID_CONN_STR, NULL, NULL);
-					goto cleanup;
-				}
-
-				if (zend_hash_get_current_key_ex(ht, &key, &klen, &index, 0, &position) != HASH_KEY_IS_STRING) {
-					pdo_cubrid_error(dbh, CUBRID_ER_INVALID_CONN_STR, NULL, NULL);
-					goto cleanup;
-				} 
-
-				snprintf(temp_buffer, sizeof(temp_buffer)-1, "%s%s=%s", first?"?":"&", key, Z_STRVAL_PP(data));
-				strncat(connect_url, temp_buffer, sizeof(connect_url)-strlen(connect_url)-1);
-
-				if (first)
-				{
-					first = 0;
-				}
-		}
-	}
-
-	if ((cubrid_conn = cci_connect_with_url_ex(connect_url, dbh->username, dbh->password, &error)) < 0) {
-		pdo_cubrid_error(dbh, cubrid_conn, &error, NULL);
+    if ((cubrid_conn = cci_connect(host, port, dbname, dbh->username, dbh->password)) < 0) {
+		pdo_cubrid_error(dbh, cubrid_conn, NULL, NULL);
 		goto cleanup;
-	}
+    }
 
     H->conn_handle = cubrid_conn;
 	H->query_timeout = -1;
-	H->stmt_count = 0;
-	H->stmt_list = NULL;
 
-	if ((H->auto_commit = cci_get_autocommit(cubrid_conn)) < 0) {
-		pdo_cubrid_error(dbh, H->auto_commit, NULL, NULL);
-		goto cleanup;
-	}
-
-	if ((cubrid_retval = get_db_param(H, &error)) < 0 &&
-		cubrid_retval != CAS_ER_NOT_IMPLEMENTED) {
+	if ((cubrid_retval = get_db_param(H, &error)) < 0) {
 		pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
 		cci_disconnect(cubrid_conn, &error);
 		goto cleanup;
@@ -856,7 +815,7 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 
 	dbh->auto_commit = H->auto_commit;
 	dbh->native_case = PDO_CASE_LOWER;
-	dbh->alloc_own_columns = 1;
+	dbh->alloc_own_columns = 0;
 	dbh->max_escaped_char_length = 2;
 	dbh->methods = &cubrid_methods;
 
@@ -928,9 +887,7 @@ static int get_db_param(pdo_cubrid_db_handle *H, T_CCI_ERROR *error)
 
 	if ((cubrid_retval = cci_get_db_parameter(H->conn_handle, 
 					CCI_PARAM_MAX_STRING_LENGTH, &max_string_len, error)) < 0) {
-		//php_printf("CCI_PARAM_MAX_STRING_LENGTH  %d:%s<br />",error->err_code,error->err_msg);
-		//return cubrid_retval;
-		max_string_len=0;
+		return cubrid_retval;
     }
 
 	H->max_string_len = max_string_len;

@@ -1,5 +1,5 @@
 --TEST--
-PDO Common: Bug #34630 (inserting streams as LOBs, This bug might be still open on aix5.2-ppc64 and hpux11.23-ia64)
+PDO Common: Bug #34630 (inserting streams as LOBs)
 --SKIPIF--
 <?php # vim:ft=php
 if (!extension_loaded('pdo')) die('skip');
@@ -12,14 +12,28 @@ require_once 'pdo_test.inc';
 $db = PDOTest::factory();
 
 $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
-$db->exec('CREATE TABLE cubrid_test (id int NOT NULL PRIMARY KEY, val BLOB)');
+$is_oci = $driver == 'oci';
+
+if ($is_oci) {
+	$db->exec('CREATE TABLE cubrid_test (id int NOT NULL PRIMARY KEY, val BLOB)');
+} else {
+	$db->exec('CREATE TABLE cubrid_test (id int NOT NULL PRIMARY KEY, val VARCHAR(256))');
+}
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $fp = tmpfile();
 fwrite($fp, "I am the LOB data");
 rewind($fp);
 
-$insert = $db->prepare("insert into cubrid_test (id, val) values (1, :blob)");
+if ($is_oci) {
+	/* oracle is a bit different; you need to initiate a transaction otherwise
+	 * the empty blob will be committed implicitly when the statement is
+	 * executed */
+	$db->beginTransaction();
+	$insert = $db->prepare("insert into test (id, val) values (1, EMPTY_BLOB()) RETURNING val INTO :blob");
+} else {
+	$insert = $db->prepare("insert into test (id, val) values (1, :blob)");
+}
 $insert->bindValue(':blob', $fp, PDO::PARAM_LOB);
 $insert->execute();
 $insert = null;
@@ -28,6 +42,8 @@ $db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, true);
 var_dump($db->query("SELECT * FROM cubrid_test")->fetchAll(PDO::FETCH_ASSOC));
 
 ?>
+--XFAIL--
+This bug might be still open on aix5.2-ppc64 and hpux11.23-ia64
 --EXPECT--
 array(1) {
   [0]=>
