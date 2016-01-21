@@ -1216,7 +1216,7 @@ static int type2str(T_CCI_COL_INFO * column_info, char *type_name, int type_name
 {
     char buf[64];
 
-    switch (CCI_GET_COLLECTION_DOMAIN(column_info->ext_type)) {
+    switch (CCI_GET_COLLECTION_DOMAIN(column_info->type)) {
     case CCI_U_TYPE_UNKNOWN:
 		snprintf(buf, sizeof(buf), "unknown");
 	break;
@@ -1298,11 +1298,11 @@ static int type2str(T_CCI_COL_INFO * column_info, char *type_name, int type_name
 		return FAILURE;
     }
 
-    if (CCI_IS_SET_TYPE(column_info->ext_type)) {
+    if (CCI_IS_SET_TYPE(column_info->type)) {
 		snprintf(type_name, type_name_len, "set(%s)", buf);
-    } else if (CCI_IS_MULTISET_TYPE(column_info->ext_type)) {
+    } else if (CCI_IS_MULTISET_TYPE(column_info->type)) {
 		snprintf(type_name, type_name_len, "multiset(%s)", buf);
-    } else if (CCI_IS_SEQUENCE_TYPE(column_info->ext_type)) {
+    } else if (CCI_IS_SEQUENCE_TYPE(column_info->type)) {
 		snprintf(type_name, type_name_len, "sequence(%s)", buf);
     } else {
 		snprintf(type_name, type_name_len, "%s", buf);
