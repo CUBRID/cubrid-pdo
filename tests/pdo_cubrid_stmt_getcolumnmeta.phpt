@@ -33,7 +33,7 @@ array(16) {
   ["def"]=>
   string(0) ""
   ["precision"]=>
-  int(10)
+  int(0)
   ["scale"]=>
   int(0)
   ["not_null"]=>
@@ -67,7 +67,7 @@ array(16) {
   ["def"]=>
   string(0) ""
   ["precision"]=>
-  int(10)
+  int(0)
   ["scale"]=>
   int(0)
   ["not_null"]=>
@@ -83,7 +83,7 @@ array(16) {
   ["foreign_key"]=>
   int(0)
   ["reverse_index"]=>
-  int(0)
+  int(1)
   ["reverse_unique"]=>
   int(0)
   ["len"]=>
@@ -101,7 +101,7 @@ array(16) {
   ["def"]=>
   string(0) ""
   ["precision"]=>
-  int(10)
+  int(0)
   ["scale"]=>
   int(0)
   ["not_null"]=>
@@ -117,7 +117,7 @@ array(16) {
   ["foreign_key"]=>
   int(1)
   ["reverse_index"]=>
-  int(0)
+  int(1)
   ["reverse_unique"]=>
   int(0)
   ["len"]=>
@@ -169,7 +169,7 @@ array(16) {
   ["def"]=>
   string(0) ""
   ["precision"]=>
-  int(10)
+  int(0)
   ["scale"]=>
   int(0)
   ["not_null"]=>
@@ -193,4 +193,3 @@ array(16) {
   ["pdo_type"]=>
   int(2)
 }
-
