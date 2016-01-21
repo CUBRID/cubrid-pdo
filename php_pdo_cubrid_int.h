@@ -65,33 +65,33 @@ typedef enum
 #define CUBRID_SCH_COL_PRIVILEGE		CCI_SCH_ATTR_PRIVILEGE
 #define CUBRID_SCH_DIRECT_SUPER_TABLE	CCI_SCH_DIRECT_SUPER_CLASS
 #define CUBRID_SCH_PRIMARY_KEY			CCI_SCH_PRIMARY_KEY
-#define CUBRID_SCH_IMPORTED_KEYS		CCI_SCH_IMPORTED_KEYS
-#define CUBRID_SCH_EXPORTED_KEYS		CCI_SCH_EXPORTED_KEYS
-#define CUBRID_SCH_CROSS_REFERENCE		CCI_SCH_CROSS_REFERENCE
+
+/* check if query exec finished every interval */
+#define EXEC_CHECK_INTERVAL 10
 
 /* error codes */
-#define CUBRID_ER_NO_MORE_MEMORY			-30001
-#define CUBRID_ER_INVALID_SQL_TYPE			-30002
-#define CUBRID_ER_CANNOT_GET_COLUMN_INFO 	-30003
-#define CUBRID_ER_INIT_ARRAY_FAIL			-30004
-#define CUBRID_ER_UNKNOWN_TYPE				-30005
-#define CUBRID_ER_INVALID_PARAM				-30006
-#define CUBRID_ER_INVALID_ARRAY_TYPE 		-30007
-#define CUBRID_ER_NOT_SUPPORTED_TYPE 		-30008
-#define CUBRID_ER_OPEN_FILE					-30009
-#define CUBRID_ER_CREATE_TEMP_FILE			-30010
-#define CUBRID_ER_TRANSFER_FAIL				-30011
-#define CUBRID_ER_PHP						-30012
-#define CUBRID_ER_REMOVE_FILE				-30013
-#define CUBRID_ER_INVALID_CONN_HANDLE		-30014
-#define CUBRID_ER_INVALID_STMT_HANDLE		-30015
-#define CUBRID_ER_NOT_PREPARED				-30016
-#define CUBRID_ER_PARAM_NOT_BIND			-30017
-#define CUBRID_ER_INVALID_INDEX				-30018
-#define CUBRID_ER_INVALID_CONN_STR			-30019
-#define CUBRID_ER_EXEC_TIMEOUT				-30021
-#define CUBRID_ER_INVALID_CURSOR_POS		-30022
-#define CUBRID_ER_END						-31000
+#define CUBRID_ER_NO_MORE_MEMORY			-2001
+#define CUBRID_ER_INVALID_SQL_TYPE			-2002
+#define CUBRID_ER_CANNOT_GET_COLUMN_INFO 	-2003
+#define CUBRID_ER_INIT_ARRAY_FAIL			-2004
+#define CUBRID_ER_UNKNOWN_TYPE				-2005
+#define CUBRID_ER_INVALID_PARAM				-2006
+#define CUBRID_ER_INVALID_ARRAY_TYPE 		-2007
+#define CUBRID_ER_NOT_SUPPORTED_TYPE 		-2008
+#define CUBRID_ER_OPEN_FILE					-2009
+#define CUBRID_ER_CREATE_TEMP_FILE			-2010
+#define CUBRID_ER_TRANSFER_FAIL				-2011
+#define CUBRID_ER_PHP						-2012
+#define CUBRID_ER_REMOVE_FILE				-2013
+#define CUBRID_ER_INVALID_CONN_HANDLE		-2014
+#define CUBRID_ER_INVALID_STMT_HANDLE		-2015
+#define CUBRID_ER_NOT_PREPARED				-2016
+#define CUBRID_ER_PARAM_NOT_BIND			-2017
+#define CUBRID_ER_INVALID_INDEX				-2018
+#define CUBRID_ER_INVALID_CONN_STR			-2019
+#define CUBRID_ER_ROLLBACK_IN_AUTOCOMMIT	-2020
+#define CUBRID_ER_EXEC_TIMEOUT				-2021
+#define CUBRID_ER_INVALID_CURSOR_POS		-2022
 /* CAUTION! Also add the error message string to db_error[] */
 
 /* Define Cubrid DB parameters */
@@ -103,22 +103,14 @@ typedef struct
 
 static const DB_PARAMETER db_parameters[] = {
     {CCI_PARAM_ISOLATION_LEVEL, "PARAM_ISOLATION_LEVEL"},
-    {CCI_PARAM_LOCK_TIMEOUT, "PARAM_LOCK_TIMEOUT"},
-    {CCI_PARAM_MAX_STRING_LENGTH, "PARAM_MAX_STRING_LENGTH"},
+    {CCI_PARAM_LOCK_TIMEOUT, "LOCK_TIMEOUT"},
+    {CCI_PARAM_MAX_STRING_LENGTH, "MAX_STRING_LENGTH"},
     {CCI_PARAM_AUTO_COMMIT, "PARAM_AUTO_COMMIT"}
 };
 
 /************************************************************************
 * PRIVATE TYPE DEFINITIONS
 ************************************************************************/
-
-typedef void *T_CCI_LOB;
-
-typedef struct
-{
-	T_CCI_LOB lob;
-	T_CCI_U_TYPE type;
-} pdo_cubrid_lob;
 
 typedef struct
 {
@@ -127,8 +119,6 @@ typedef struct
     unsigned int errcode;
     char *errmsg;
 } pdo_cubrid_error_info;
-
-typedef struct cubrid_stmt pdo_cubrid_stmt;
 
 typedef struct
 {
@@ -140,12 +130,9 @@ typedef struct
 	int auto_commit;
 	int query_timeout;
     pdo_cubrid_error_info einfo;
-
-	int stmt_count;
-	pdo_cubrid_stmt **stmt_list;	
 } pdo_cubrid_db_handle;
 
-struct cubrid_stmt
+typedef struct
 {
     pdo_cubrid_db_handle *H;
     int stmt_handle;
@@ -161,20 +148,13 @@ struct cubrid_stmt
     T_CCI_CUBRID_STMT sql_type;
 	T_CCI_PARAM_INFO *param_info;
     T_CCI_COL_INFO *col_info;
-	pdo_cubrid_lob *lob;
-};
+} pdo_cubrid_stmt;
 
 extern pdo_driver_t pdo_cubrid_driver;
 
 extern int _pdo_cubrid_error(pdo_dbh_t *dbh, pdo_stmt_t *stmt, int err_code, T_CCI_ERROR *error, const char *sql_state, const char *file, int line TSRMLS_DC);
 #define pdo_cubrid_error(d,e,t,z) _pdo_cubrid_error(d, NULL, e, t, z, __FILE__, __LINE__ TSRMLS_CC)
 #define pdo_cubrid_error_stmt(s,e,t,z) _pdo_cubrid_error(s->dbh, s, e, t, z, __FILE__, __LINE__ TSRMLS_CC)
-
-enum {
-	PDO_CUBRID_ATTR_ISOLATION_LEVEL = PDO_ATTR_DRIVER_SPECIFIC,
-	PDO_CUBRID_ATTR_LOCK_TIMEOUT,
-	PDO_CUBRID_ATTR_MAX_STRING_LENGTH
-};
 
 extern struct pdo_stmt_methods cubrid_stmt_methods;
 

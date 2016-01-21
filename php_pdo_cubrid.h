@@ -34,13 +34,6 @@ extern zend_module_entry pdo_cubrid_module_entry;
 #include "TSRM.h"
 #endif
 
-#ifdef MS_WINDOWS
-#define CUBRID_LONG_LONG _int64
-#else
-#define CUBRID_LONG_LONG long long
-#endif
-
-
 PHP_MINIT_FUNCTION(pdo_cubrid);
 PHP_MSHUTDOWN_FUNCTION(pdo_cubrid);
 PHP_MINFO_FUNCTION(pdo_cubrid);
@@ -51,13 +44,6 @@ PHP_MINFO_FUNCTION(pdo_cubrid);
 #define PDO_CUBRID_G(v) (pdo_cubrid_globals.v)
 #endif
 
-#if PHP_MAJOR_VERSION == 7
-#define Z_TYPE_RESOURCE(res) res.type
-#define Z_TYPE_PP(zval_pp)	Z_TYPE(**zval_pp)
-#define Z_STRLEN_PP(zval_pp)	Z_STRLEN(**zval_pp)
-#define Z_STRVAL_PP(zval_pp)	Z_STRVAL(**zval_pp)
-#define Z_RES_VAL_PP(zval_pp)	Z_RES_VAL(**zval_pp)
-#endif  /*PHP_MAJOR_VERSION*/
 #endif	/* PHP_PDO_CUBRID_H */
 
 
