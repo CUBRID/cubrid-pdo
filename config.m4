@@ -5,120 +5,37 @@ dnl don't forget to call PHP_EXTENSION(cubrid)
 dnl If your extension references something external, use with:
 
 PHP_ARG_WITH(pdo-cubrid, for CUBRID support for PDO,
-[  --with-pdo-cubrid         PDO: CUBRID support.])
-
-dnl Check PHP version:
-AC_MSG_CHECKING(PHP version)
-PHP_MAJOR_VERSION=`grep 'PHP_MAJOR_VERSION' $phpincludedir/main/php_version.h | grep -oP '\d+'`
+[  --with-pdo-cubrid[=DIR]   PDO: CUBRID support. DIR is the CUBRID base install directory.])
 
 if test "$PHP_PDO_CUBRID" != "no"; then
 
-    cubrid_dir=`dirname $0`
-    CUBRID_INCDIR=""
-    CUBRID_LIBDIR=""
-    BROKER_INCDIR=""
+  CUBRID_INCDIR="$CUBRID/include"
+  CUBRID_LIBDIR="$CUBRID/lib"
 
-    case $host in
-      *-linux-*) os=linux ;;
-    esac
-    case $host in
-      *-apple-*) os=mac ;
-    esac
-    if test "$os" = "linux"; then
-        CUBRID_INCDIR="$cubrid_dir/cci-src/src/cci"
-     	BROKER_INCDIR="$cubrid_dir/cci-src/src/broker"
-        CUBRID_LIBDIR="$cubrid_dir/cci-src/cci/.libs"
-        CCISRC_DIR="$cubrid_dir/cci-src"
-        AC_CHECK_SIZEOF([int *])
+  if test "$PHP_PDO_CUBRID" != "" && test "$PHP_PDO_CUBRID" != "yes"; then
+    CUBRID_INCDIR="$PHP_PDO_CUBRID/include"
+    CUBRID_LIBDIR="$PHP_PDO_CUBRID/lib"
+  fi
 
-        if test "$ac_cv_sizeof_int_p" = "8"; then
-    	    AC_MSG_NOTICE([Build static cci lib 64 bits])
-            pushd $CCISRC_DIR
-            chmod +x configure
-            chmod +x external/libregex38a/configure
-            chmod +x external/libregex38a/install-sh
-            ./configure --enable-64bit
-    	    make
-            popd
-        else
-    	    AC_MSG_NOTICE([Build static cci lib])
-            pushd $CCISRC_DIR
-            chmod +x configure
-            chmod +x external/libregex38a/configure
-            chmod +x external/libregex38a/install-sh
-            ./configure
-    	    make
-            popd
-        fi
-    elif test "$os" = "mac"; then
-        CUBRID_INCDIR="$cubrid_dir/cci-src/src/cci"
-     	BROKER_INCDIR="$cubrid_dir/cci-src/src/broker"
-        CUBRID_LIBDIR="$cubrid_dir/cci-src/cci/.libs"
-        CCISRC_DIR="$cubrid_dir/cci-src"
-        AC_CHECK_SIZEOF([int *])
+  if ! test -r "$CUBRID_INCDIR/cas_cci.h"; then
+    AC_MSG_ERROR([$CUBRID_INCDIR/cas_cci.h Please set CUBRID base install dir with --with-pdo-cubrid[=DIR].])
+  fi
 
-        if test "$ac_cv_sizeof_int_p" = "8"; then
-    	    AC_MSG_NOTICE([Build static cci lib 64 bits])
-            pushd $CCISRC_DIR
-            chmod +x configure
-            chmod +x external/libregex38a/configure
-            chmod +x external/libregex38a/install-sh
-            ./configure --enable-64bit
-    	    make
-            popd
-        else
-    	    AC_MSG_NOTICE([Build static cci lib])
-            pushd $CCISRC_DIR
-            chmod +x configure
-            chmod +x external/libregex38a/configure
-            chmod +x external/libregex38a/install-sh
-            ./configure
-    	    make
-            popd
-        fi     
-    else
-        AC_MSG_ERROR([Your OS not supported. Exit.])
-    fi
+  PHP_CHECK_LIBRARY("cascci", cci_init, [], [
+  AC_MSG_ERROR([$CUBRID_LIBDIR/libcascci.so Please set CUBRID base install dir with --with-pdo-cubrid[=DIR].])
+  ], [
+  -L$CUBRID_LIBDIR
+  ])
 
-    if ! test -r "$CUBRID_INCDIR/cas_cci.h"; then
-        AC_MSG_ERROR([$cubrid_dir/$CUBRID_INCDIR/cas_cci.h not found. This package must be broken. Please report a bug.])
-    fi
+  dnl Action..
+  PHP_ADD_INCLUDE($CUBRID_INCDIR)
 
-    if test -r "$CUBRID_LIBDIR/libcascci.a"; then
-        #
-        # libcascci.a depends on pthread and stdc++.
-        #
+  PHP_ADD_LIBRARY_WITH_PATH(cascci, $CUBRID_LIBDIR, PDO_CUBRID_SHARED_LIBADD)
+  PHP_SUBST(PDO_CUBRID_SHARED_LIBADD)
 
-        PHP_CHECK_LIBRARY("pthread", pthread_create, [], [
-        AC_MSG_ERROR([pthread library not found! Please install it at first.])
-        ], [])
-    
-        PHP_CHECK_LIBRARY("stdc++", main, [], [
-        AC_MSG_ERROR([stdc++ library not found! Please install it at before.])
-        ], [])
-
-    else
-        AC_MSG_ERROR([libcascci.a not found. Failed to build cci lib. Exit.])
-    fi
-
-    dnl Action..
-    PHP_ADD_INCLUDE("$CUBRID_INCDIR")
-    PHP_ADD_INCLUDE("$BROKER_INCDIR")
-
-    PHP_ADD_LIBRARY(stdc++, , PDO_CUBRID_SHARED_LIBADD)
-    PHP_ADD_LIBRARY(pthread, , PDO_CUBRID_SHARED_LIBADD)
-    LDFLAGS="$LDFLAGS $CUBRID_LIBDIR/libcascci.a -lpthread"
-  
-    PHP_SUBST(PDO_CUBRID_SHARED_LIBADD)
-
-    if test "$PHP_MAJOR_VERSION" = "7"; then
-        PHP_NEW_EXTENSION(pdo_cubrid, pdo_cubrid.c cubrid_driver7.c cubrid_statement7.c, $ext_shared,,-I$pdo_inc_path -I)
-    else
-        PHP_NEW_EXTENSION(pdo_cubrid, pdo_cubrid.c cubrid_driver.c cubrid_statement.c, $ext_shared,,-I$pdo_inc_path -I)
-    fi
-
-    ifdef([PHP_ADD_EXTENSION_DEP],
-    [
-        PHP_ADD_EXTENSION_DEP(pdo_cubrid, pdo) 
-    ])
+  PHP_NEW_EXTENSION(pdo_cubrid, pdo_cubrid.c cubrid_driver.c cubrid_statement.c, $ext_shared,,-I$pdo_inc_path -I)
+  ifdef([PHP_ADD_EXTENSION_DEP],
+  [
+    PHP_ADD_EXTENSION_DEP(pdo_cubrid, pdo) 
+  ])
 fi
