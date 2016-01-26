@@ -269,7 +269,10 @@ static int cubrid_handle_preparer(pdo_dbh_t *dbh, const char *sql, long sql_len,
 
 		return 0;
 	}
-
+       if(H->query_timeout != -1 && H->query_timeout != 0)
+       {
+           cci_set_query_timeout(stmt_handle,H->query_timeout*1000);
+       }
 	S->stmt_handle = stmt_handle;
 	S->bind_num = cci_get_bind_num(stmt_handle);
 
@@ -280,8 +283,10 @@ static int cubrid_handle_preparer(pdo_dbh_t *dbh, const char *sql, long sql_len,
 		}
 
 		if ((cubrid_retval = cci_get_param_info(stmt_handle, &(S->param_info), &error)) < 0) {
-			pdo_cubrid_error_stmt(stmt, cubrid_retval, &error, NULL);
-			return 0;
+			if (cubrid_retval != CAS_ER_NOT_IMPLEMENTED) {
+				pdo_cubrid_error_stmt(stmt, cubrid_retval, &error, NULL);
+				return 0;
+			}
 		}
     }
 
@@ -312,6 +317,11 @@ static long cubrid_handle_doer(pdo_dbh_t *dbh, const char *sql, long sql_len TSR
 		pdo_cubrid_error(dbh, stmt_handle, &error, NULL);
 		return -1;
 	}
+
+       if(H->query_timeout != -1&& H->query_timeout != 0)
+       {
+           cci_set_query_timeout(stmt_handle,H->query_timeout*1000);
+       }
 
     ret = cci_execute(stmt_handle, exec_flag, 0, &error);
 
@@ -449,11 +459,6 @@ static int pdo_cubrid_set_attribute(pdo_dbh_t *dbh, long attr, zval *val TSRMLS_
 		if (H->query_timeout ^ Z_LVAL_P(val)) {
 			if ((Z_LVAL_P(val) == 0) || (Z_LVAL_P(val) < 0 && Z_LVAL_P(val) != -1)) {
 				return 0;
-			}
-			
-			if ((cubrid_retval = cci_set_query_timeout(H->conn_handle, Z_LVAL_P(val) * 1000)) < 0) {
-				pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
-				return 0;	
 			}
 
 			H->query_timeout = Z_LVAL_P(val);
@@ -761,6 +766,8 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 		{ "dbname", "", 0 }
     };
 
+	char connect_url[2048] = {'\0'};
+
 	vars_size = sizeof(vars)/sizeof(vars[0]);
 
     H = pecalloc(1, sizeof(pdo_cubrid_db_handle), dbh->is_persistent);
@@ -773,17 +780,54 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 		pdo_cubrid_error(dbh, CUBRID_ER_INVALID_CONN_STR, NULL, NULL);
 		goto cleanup;
 	}
-    
-    host = vars[0].optval;
-    if(vars[1].optval) {
-		port = atoi(vars[1].optval);
-    }
-    dbname = vars[2].optval;
 
-    if ((cubrid_conn = cci_connect_ex(host, port, dbname, dbh->username, dbh->password, &error)) < 0) {
+	host = vars[0].optval;
+	if(vars[1].optval) {
+		port = atoi(vars[1].optval);
+	}
+	dbname = vars[2].optval;
+
+	snprintf(connect_url, sizeof(connect_url), "cci:CUBRID:%s:%d:%s:%s:%s:", host, (int)port, dbname, dbh->username, dbh->password);
+
+	if (driver_options)
+	{
+		HashPosition position;
+		HashTable *ht = Z_ARRVAL_P(driver_options);
+		zval **data = NULL;
+		int first = 1;
+		char temp_buffer[1024]={'\0'};
+
+		for (zend_hash_internal_pointer_reset_ex(ht, &position);
+			zend_hash_get_current_data_ex(ht, (void**) &data, &position) == SUCCESS;
+			zend_hash_move_forward_ex(ht, &position)) {
+				char *key = NULL;
+				uint  klen;
+				ulong index;
+
+				if (Z_TYPE_PP(data) != IS_STRING) {
+					pdo_cubrid_error(dbh, CUBRID_ER_INVALID_CONN_STR, NULL, NULL);
+					goto cleanup;
+				}
+
+				if (zend_hash_get_current_key_ex(ht, &key, &klen, &index, 0, &position) != HASH_KEY_IS_STRING) {
+					pdo_cubrid_error(dbh, CUBRID_ER_INVALID_CONN_STR, NULL, NULL);
+					goto cleanup;
+				} 
+
+				snprintf(temp_buffer, sizeof(temp_buffer)-1, "%s%s=%s", first?"?":"&", key, Z_STRVAL_PP(data));
+				strncat(connect_url, temp_buffer, sizeof(connect_url)-strlen(connect_url)-1);
+
+				if (first)
+				{
+					first = 0;
+				}
+		}
+	}
+
+	if ((cubrid_conn = cci_connect_with_url_ex(connect_url, dbh->username, dbh->password, &error)) < 0) {
 		pdo_cubrid_error(dbh, cubrid_conn, &error, NULL);
 		goto cleanup;
-    }
+	}
 
     H->conn_handle = cubrid_conn;
 	H->query_timeout = -1;
@@ -795,7 +839,8 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 		goto cleanup;
 	}
 
-	if ((cubrid_retval = get_db_param(H, &error)) < 0) {
+	if ((cubrid_retval = get_db_param(H, &error)) < 0 &&
+		cubrid_retval != CAS_ER_NOT_IMPLEMENTED) {
 		pdo_cubrid_error(dbh, cubrid_retval, &error, NULL);
 		cci_disconnect(cubrid_conn, &error);
 		goto cleanup;

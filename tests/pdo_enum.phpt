@@ -97,7 +97,7 @@ array(1) {
 }
 array(16) {
   ["type"]=>
-  string(4) "enum"
+  string(10) "varchar(0)"
   ["name"]=>
   string(1) "a"
   ["table"]=>

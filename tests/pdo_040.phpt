@@ -12,7 +12,7 @@ PDOTest::skip();
 require_once 'pdo_test.inc';
 $db = PDOTest::factory();
 
-$fp = fopen('aclocal.m4', 'rb');
+$fp = fopen('config.m4', 'rb');
 
 $db->exec('CREATE TABLE cubrid_test(id INT PRIMARY KEY, image BLOB)');
 
