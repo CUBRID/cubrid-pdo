@@ -172,7 +172,7 @@ array(16) {
   ["scale"]=>
   int(0)
   ["not_null"]=>
-  int(1)
+  int(0)
   ["auto_increment"]=>
   int(0)
   ["unique_key"]=>

@@ -22,10 +22,10 @@ printf("\nautocommit: %d\ntimeout: %d\nlock_timeout: %d\nisolation_level: %d\nma
 $db->setAttribute(PDO::ATTR_TIMEOUT, 1);
 $db->setAttribute(PDO::CUBRID_ATTR_LOCK_TIMEOUT, 4);
 $db->setAttribute(PDO::ATTR_AUTOCOMMIT, 0);
-$db->setAttribute(PDO::CUBRID_ATTR_ISOLATION_LEVEL, 2);
+$db->setAttribute(PDO::CUBRID_ATTR_ISOLATION_LEVEL, 5);
 
 printf("\n---- PDO Attributes after set ----\n");
-printf("\nautocommit: %d\ntimeout: %d\nlock_timeout: %d\nisolation_level: %d",
+printf("\nautocommit: %d\ntimeout: %d\nlock_timeout: %d\nisolation_level: %d\n",
         $db->getAttribute(PDO::ATTR_AUTOCOMMIT), $db->getAttribute(PDO::ATTR_TIMEOUT),
         $db->getAttribute(PDO::CUBRID_ATTR_LOCK_TIMEOUT),$db->getAttribute(PDO::CUBRID_ATTR_ISOLATION_LEVEL));
 ?>
@@ -45,4 +45,4 @@ client_version: %s
 autocommit: 0
 timeout: 1
 lock_timeout: 4
-isolation_level: 2
+isolation_level: 5
