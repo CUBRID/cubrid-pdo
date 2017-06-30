@@ -343,14 +343,13 @@ static int cubrid_handle_quoter(pdo_dbh_t *dbh, const char *unquoted, int unquot
 	
 	*quoted = (char *) emalloc(2 * unquotedlen + 18);
 
-	if ((ret = cci_escape_string(H->conn_handle, *quoted+1, unquoted, unquotedlen, &error)) < 0) {
+	if ((ret = cci_escape_string(H->conn_handle, *quoted, unquoted, unquotedlen, &error)) < 0) {
 		pdo_cubrid_error(dbh, ret, &error, NULL);
 		efree(*quoted);
 		return 0;
 	}
 	*quotedlen = ret;
-	(*quoted)[0] =(*quoted)[++*quotedlen] = '\'';	
-	(*quoted)[++*quotedlen] = '\0';
+	(*quoted)[*quotedlen] = '\0';
 
 	return 1;
 }

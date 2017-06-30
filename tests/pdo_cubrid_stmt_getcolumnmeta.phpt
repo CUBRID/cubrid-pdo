@@ -37,7 +37,7 @@ array(16) {
   ["scale"]=>
   int(0)
   ["not_null"]=>
-  int(1)
+  int(0)
   ["auto_increment"]=>
   int(0)
   ["unique_key"]=>
@@ -65,7 +65,7 @@ array(16) {
   ["table"]=>
   string(4) "game"
   ["def"]=>
-  string(0) ""
+  string(4) "NULL"
   ["precision"]=>
   int(10)
   ["scale"]=>
@@ -99,7 +99,7 @@ array(16) {
   ["table"]=>
   string(4) "game"
   ["def"]=>
-  string(0) ""
+  string(4) "NULL"
   ["precision"]=>
   int(10)
   ["scale"]=>
@@ -133,7 +133,7 @@ array(16) {
   ["table"]=>
   string(4) "game"
   ["def"]=>
-  string(0) ""
+  string(4) "NULL"
   ["precision"]=>
   int(3)
   ["scale"]=>
@@ -167,7 +167,7 @@ array(16) {
   ["table"]=>
   string(4) "game"
   ["def"]=>
-  string(0) ""
+  string(4) "NULL"
   ["precision"]=>
   int(10)
   ["scale"]=>
@@ -193,4 +193,3 @@ array(16) {
   ["pdo_type"]=>
   int(2)
 }
-
