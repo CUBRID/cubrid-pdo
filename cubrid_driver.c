@@ -343,14 +343,13 @@ static int cubrid_handle_quoter(pdo_dbh_t *dbh, const char *unquoted, int unquot
 	
 	*quoted = (char *) emalloc(2 * unquotedlen + 18);
 
-	if ((ret = cci_escape_string(H->conn_handle, *quoted+1, unquoted, unquotedlen, &error)) < 0) {
+	if ((ret = cci_escape_string(H->conn_handle, *quoted, unquoted, unquotedlen, &error)) < 0) {
 		pdo_cubrid_error(dbh, ret, &error, NULL);
 		efree(*quoted);
 		return 0;
 	}
 	*quotedlen = ret;
-	(*quoted)[0] =(*quoted)[++*quotedlen] = '\'';	
-	(*quoted)[++*quotedlen] = '\0';
+	(*quoted)[*quotedlen] = '\0';
 
 	return 1;
 }
@@ -760,12 +759,12 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 	int i;
 
     char *host = NULL, *dbname = NULL;
-    unsigned int port = 33000;
+    unsigned int port = 55300;
 
     struct pdo_data_src_parser vars[] = {
 		{ "host", "localhost", 0 },
-		{ "port", "33000", 0},
-		{ "dbname", "", 0 }
+		{ "port", "55300", 0},
+		{ "dbname", "demodb", 0 }
     };
 
 	char connect_url[2048] = {'\0'};
