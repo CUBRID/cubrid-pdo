@@ -37,6 +37,10 @@ if test "$PHP_PDO_CUBRID" != "no"; then
             chmod +x configure
             chmod +x external/libregex38a/configure
             chmod +x external/libregex38a/install-sh
+			chmod +x autogen.sh
+			chmod +x build.sh
+			./autogen.sh
+			./build.sh -t 64
             ./configure --enable-64bit
     	    make
             popd
@@ -46,6 +50,10 @@ if test "$PHP_PDO_CUBRID" != "no"; then
             chmod +x configure
             chmod +x external/libregex38a/configure
             chmod +x external/libregex38a/install-sh
+			chmod +x autogen.sh
+			chmod +x build.sh
+			./autogen.sh
+			./build.sh -t 32
             ./configure
     	    make
             popd

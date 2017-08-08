@@ -333,8 +333,8 @@ static long cubrid_handle_doer(pdo_dbh_t *dbh, const char *sql, long sql_len TSR
 	return ret;
 }
 
-static int cubrid_handle_quoter(pdo_dbh_t *dbh, const char *unquoted, int unquotedlen, 
-		char **quoted, int *quotedlen, enum pdo_param_type paramtype TSRMLS_DC)
+static int cubrid_handle_quoter(pdo_dbh_t *dbh, const char *unquoted, size_t unquotedlen, 
+		char **quoted, size_t *quotedlen, enum pdo_param_type paramtype TSRMLS_DC)
 {
 	pdo_cubrid_db_handle *H = (pdo_cubrid_db_handle *)dbh->driver_data;
 
@@ -343,14 +343,14 @@ static int cubrid_handle_quoter(pdo_dbh_t *dbh, const char *unquoted, int unquot
 	
 	*quoted = (char *) emalloc(2 * unquotedlen + 18);
 
-	if ((ret = cci_escape_string(H->conn_handle, *quoted+1, unquoted, unquotedlen, &error)) < 0) {
+	if ((ret = cci_escape_string(H->conn_handle, *quoted, unquoted, unquotedlen, &error)) < 0) {
 		pdo_cubrid_error(dbh, ret, &error, NULL);
 		efree(*quoted);
 		return 0;
 	}
 	*quotedlen = ret;
-	(*quoted)[0] =(*quoted)[++*quotedlen] = '\'';	
-	(*quoted)[++*quotedlen] = '\0';
+	//(*quoted)[0] =(*quoted)[++*quotedlen] = '\'';	
+	(*quoted)[*quotedlen] = '\0';
 
 	return 1;
 }
@@ -561,7 +561,7 @@ static int pdo_cubrid_get_attribute(pdo_dbh_t *dbh, long attr, zval *return_valu
 	return 1;
 }
 
-static char *pdo_cubrid_last_insert_id(pdo_dbh_t *dbh, const char *name, unsigned int *len TSRMLS_DC)
+static char *pdo_cubrid_last_insert_id(pdo_dbh_t *dbh, const char *name, size_t *len TSRMLS_DC)
 {
 	pdo_cubrid_db_handle *H = (pdo_cubrid_db_handle *)dbh->driver_data;
 
@@ -636,7 +636,9 @@ static PHP_METHOD(PDO, cubrid_schema)
 	pdo_cubrid_db_handle *H;
 
     char *class_name = NULL, *attr_name = NULL;
-    long schema_type, class_name_len, attr_name_len;
+    //long schema_type, class_name_len, attr_name_len;
+    zend_long schema_type;
+	size_t class_name_len, attr_name_len;
 
     int request_handle;
     int flag = 0;
@@ -665,7 +667,7 @@ static PHP_METHOD(PDO, cubrid_schema)
 		break;
     }
 
-	dbh = Z_OBJ_P(getThis() TSRMLS_CC);
+	dbh = Z_PDO_DBH_P(getThis() TSRMLS_CC);
 	PDO_CONSTRUCT_CHECK;
 
 	H = (pdo_cubrid_db_handle *)dbh->driver_data;
@@ -757,12 +759,12 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 	int i;
 
     char *host = NULL, *dbname = NULL;
-    unsigned int port = 33000;
+    unsigned int port = 55300;
 
     struct pdo_data_src_parser vars[] = {
 		{ "host", "localhost", 0 },
-		{ "port", "33000", 0},
-		{ "dbname", "", 0 }
+		{ "port", "55300", 0},
+		{ "dbname", "demodb", 0 }
     };
 
 	char connect_url[2048] = {'\0'};

@@ -759,12 +759,12 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 	int i;
 
     char *host = NULL, *dbname = NULL;
-    unsigned int port = 33000;
+    unsigned int port = 55300;
 
     struct pdo_data_src_parser vars[] = {
 		{ "host", "localhost", 0 },
-		{ "port", "33000", 0},
-		{ "dbname", "", 0 }
+		{ "port", "55300", 0},
+		{ "dbname", "demodb", 0 }
     };
 
 	char connect_url[2048] = {'\0'};
