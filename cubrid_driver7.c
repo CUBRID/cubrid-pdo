@@ -234,7 +234,7 @@ static int cubrid_handle_preparer(pdo_dbh_t *dbh, const char *sql, long sql_len,
 	int ret = 0, stmt_handle = 0;
 	int cubrid_retval = 0;
 	char *nsql = NULL;
-	int nsql_len = 0;
+	size_t nsql_len = 0;
     T_CCI_ERROR error;
 	int i;
 
