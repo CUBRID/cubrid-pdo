@@ -518,6 +518,8 @@ static int cubrid_stmt_datatype_convert(int type)
 static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data *param, 
 		enum pdo_param_event event_type TSRMLS_DC)
 {
+    zval *parameter;
+
     pdo_cubrid_stmt *S = (pdo_cubrid_stmt *)stmt->driver_data;
 
     char *bind_value = NULL, *bind_value_type = NULL;
@@ -562,14 +564,19 @@ static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data 
 
             bind_index = param->paramno + 1;
 
+			if (Z_ISREF(param->parameter)) {
+				parameter = Z_REFVAL(param->parameter);
+			}
+			else {
+				parameter = &param->parameter;
+            }
             /* driver_params: cubrid data type name (string), pass by driver_options */
-            if (1)//!param->driver_params) 
+
+            /* if driver_params is null, use param->param_type */ 
+            switch (param->param_type) 
             {
-                /* if driver_params is null, use param->param_type */ 
-                switch (param->param_type) 
-                {
-                	case PDO_PARAM_INT:
-                		u_type = CCI_U_TYPE_INT;
+                case PDO_PARAM_INT:
+                	u_type = CCI_U_TYPE_INT;
 
                 		break;
                 	case PDO_PARAM_STR:
@@ -586,40 +593,20 @@ static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data 
                 	case PDO_PARAM_NULL:
                 		u_type = CCI_U_TYPE_NULL;
 
-                		break;
-                	case PDO_PARAM_STMT:
-                	default:
-                		pdo_cubrid_error_stmt(stmt, CUBRID_ER_NOT_SUPPORTED_TYPE, NULL, NULL);
-                		return 0;
-                }
-                if(Z_TYPE_P(&(param->parameter)) == IS_ARRAY)
-                {
-                    e_type = cubrid_type_pdo2cubrid(u_type);
-                    u_type = CCI_U_TYPE_SET;                    
-                }
-            } 
-            else 
-            {
-                convert_to_string(&param->driver_params);
-                bind_value_type = Z_STRVAL_P(&param->driver_params);
-                e_type = get_cubrid_u_type_by_name(bind_value_type);
-                u_type = e_type;
-                if(Z_TYPE_P(&param->parameter) == IS_ARRAY)
-                {
-                   u_type = CCI_U_TYPE_SET;
-                }
-                if(u_type == CCI_U_TYPE_ENUM)
-                {
-                    u_type = cubrid_stmt_datatype_convert(param->param_type);
-                }
-                if (u_type == CCI_U_TYPE_UNKNOWN) 
-                {
+                	break;
+                case PDO_PARAM_STMT:
+                default:
                 	pdo_cubrid_error_stmt(stmt, CUBRID_ER_NOT_SUPPORTED_TYPE, NULL, NULL);
                 	return 0;
-                }
             }
 
-            if (u_type == CCI_U_TYPE_NULL || Z_TYPE_P(&param->parameter) == IS_NULL) 
+            if(Z_TYPE_P(parameter) == IS_ARRAY)
+            {
+                e_type = cubrid_type_pdo2cubrid(u_type);
+                u_type = CCI_U_TYPE_SET;                    
+            }
+
+            if (u_type == CCI_U_TYPE_NULL || Z_TYPE_P(parameter) == IS_NULL) 
             {
                 cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, CCI_A_TYPE_STR, NULL, u_type, 0);
             } 
@@ -627,9 +614,9 @@ static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data 
             {
                 if (u_type == CCI_U_TYPE_BLOB || u_type == CCI_U_TYPE_CLOB) 
                 {
-                    if (Z_TYPE_P(&param->parameter) == IS_RESOURCE) 
+                    if (Z_TYPE_P(parameter) == IS_RESOURCE)
                     {
-                        php_stream_from_zval_no_verify(stm, &param->parameter);
+                        php_stream_from_zval_no_verify(stm, parameter);
                         if (!stm) 
                         {
                         	php_error_docref(NULL TSRMLS_CC, E_WARNING, "Expected a stream resource when param type is LOB\n");
@@ -639,8 +626,8 @@ static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data 
                     else
                     {
                         /* file name */
-                        convert_to_string(&param->parameter);
-                        lobfile_name = Z_STRVAL_P(&param->parameter);
+                        convert_to_string(parameter);
+                        lobfile_name = Z_STRVAL_P(parameter);
 
                         if (!(stm = php_stream_open_wrapper(lobfile_name, "r", REPORT_ERRORS, NULL))) 
                         {
@@ -650,7 +637,7 @@ static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data 
                 } 
                 else if(u_type == CCI_U_TYPE_SET)
                 {
-                    set = cubrid_create_set_by_param(&param->parameter, e_type);
+                    set = cubrid_create_set_by_param(parameter, e_type);
                     if(set == NULL)
                    {
                        return 0;
@@ -658,7 +645,7 @@ static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data 
                 }
                 else 
                 {
-            		convert_to_string(&param->parameter);
+            		convert_to_string(parameter);
                 }
 
                 switch (u_type) 
@@ -726,8 +713,8 @@ static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data 
                 } 
                 else if (u_type == CCI_U_TYPE_BIT) 
                 {
-                    bind_value = Z_STRVAL_P(&param->parameter);
-                    bind_value_len = Z_STRLEN_P(&param->parameter);
+                    bind_value = Z_STRVAL_P(parameter);
+                    bind_value_len = Z_STRLEN_P(parameter);
                     bit_value = (T_CCI_BIT *) emalloc(sizeof(T_CCI_BIT));
                     bit_value->size = bind_value_len;
                     bit_value->buf = bind_value;
@@ -743,7 +730,7 @@ static int cubrid_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_data 
                 }
                 else 
                 {
-                    bind_value = Z_STRVAL_P(&param->parameter);
+                    bind_value = Z_STRVAL_P(parameter);
                     cubrid_retval = cci_bind_param(S->stmt_handle, bind_index, a_type, bind_value, u_type, 0);
                 } 
             }
