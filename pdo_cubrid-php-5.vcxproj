@@ -236,7 +236,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;php5ts.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_5_cubrid___Win32_Release_TS/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>pdo_5_cubrid___Win32_Release_TS/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_TS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\pdo_5_cubrid___Win32_Release_TS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
@@ -282,7 +282,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;libregex38a.lib;php5ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_5_cubrid___x64_Release_TS/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>pdo_5_cubrid___x64_Release_TS/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_TS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\pdo_5_cubrid___x64_Release_TS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
@@ -327,7 +327,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci.lib;ws2_32.lib;libregex38a.lib;php5.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>Debug/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>Debug/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_NTS_X86)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -375,7 +375,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci.lib;ws2_32.lib;libregex38a.lib;php5.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>Debug/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>Debug/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_NTS_X64)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -422,7 +422,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci.lib;ws2_32.lib;libregex38a.lib;php5.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>Release/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>Release/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_NTS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\Release/php_pdo_cubrid.pdb</ProgramDatabaseFile>
@@ -467,7 +467,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci.lib;ws2_32.lib;libregex38a.lib;php5.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>Release/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>Release/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_NTS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\Release/php_pdo_cubrid.pdb</ProgramDatabaseFile>
@@ -512,7 +512,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;libregex38a.lib;php5ts.lib;%(AdditionalDependencies);</AdditionalDependencies>
-      <OutputFile>pdo_5_cubrid___Win32_Debug_TS/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>pdo_5_cubrid___Win32_Debug_TS/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_TS_X86)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -559,7 +559,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;libregex38a.lib;php5ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_5_cubrid___x64_Debug_TS/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>pdo_5_cubrid___x64_Debug_TS/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_TS_X64)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -607,7 +607,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;libregex38a.lib;php5.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_5_cubrid___Win32_Release_NTS/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>pdo_5_cubrid___Win32_Release_NTS/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_NTS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\pdo_5_cubrid___Win32_Release_NTS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
@@ -654,7 +654,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;libregex38a.lib;php5.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_5_cubrid___x64_Release_NTS/php_pdo_cubrid.dll</OutputFile>
+      <OutputFile>pdo_5_cubrid___x64_Release_NTS/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP5_NTS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\pdo_5_cubrid___x64_Release_NTS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
