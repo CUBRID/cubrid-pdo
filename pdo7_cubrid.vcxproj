@@ -9,12 +9,12 @@
       <Configuration>Debug_TS</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
+    <ProjectConfiguration Include="Debug_NTS|Win32">
+      <Configuration>Debug_NTS</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
+    <ProjectConfiguration Include="Debug_NTS|x64">
+      <Configuration>Debug_NTS</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release_NTS|Win32">
@@ -33,19 +33,12 @@
       <Configuration>Release_TS</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F2F581A2-AF60-41DC-9520-6FD3B9450322}</ProjectGuid>
     <RootNamespace>pdo_cubrid</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>pdo7_cubrid</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NTS|Win32'" Label="Configuration">
@@ -60,13 +53,7 @@
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
@@ -90,13 +77,7 @@
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
@@ -119,11 +100,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
@@ -139,11 +116,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
@@ -156,53 +129,43 @@
     <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TS|Win32'">
-    <OutDir>.\pdo_7_cubrid___Win32_Release_TS\</OutDir>
-    <IntDir>.\pdo_7_cubrid___Win32_Release_TS\</IntDir>
+    <OutDir>$(Configuration)</OutDir>
+    <IntDir>$(Configuration)</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TS|x64'">
-    <OutDir>.\pdo_7_cubrid___x64_Release_TS\</OutDir>
-    <IntDir>.\pdo_7_cubrid___x64_Release_TS\</IntDir>
+    <OutDir>$(Configuration)</OutDir>
+    <IntDir>$(Configuration)</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\Debug\</OutDir>
-    <IntDir>.\Debug\</IntDir>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|Win32'">
+    <OutDir>$(Configuration)</OutDir>
+    <IntDir>$(Configuration)</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|x64'">
+    <OutDir>$(Configuration)</OutDir>
+    <IntDir>$(Configuration)</IntDir>
     <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>.\Release\</OutDir>
-    <IntDir>.\Release\</IntDir>
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>.\Release\</OutDir>
-    <IntDir>.\Release\</IntDir>
-    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TS|Win32'">
-    <OutDir>.\pdo_7_cubrid___Win32_Debug_TS\</OutDir>
-    <IntDir>.\pdo_7_cubrid___Win32_Debug_TS\</IntDir>
+    <OutDir>$(Configuration)</OutDir>
+    <IntDir>$(Configuration)</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TS|x64'">
-    <OutDir>.\pdo_7_cubrid___X64_Debug_TS\</OutDir>
-    <IntDir>.\pdo_7_cubrid___X64_Debug_TS\</IntDir>
+    <OutDir>$(Configuration)</OutDir>
+    <IntDir>$(Configuration)</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NTS|Win32'">
-    <OutDir>.\pdo_7_cubrid___Win32_Release_NTS\</OutDir>
-    <IntDir>.\pdo_7_cubrid___Win32_Release_NTS\</IntDir>
+    <OutDir>$(Configuration)</OutDir>
+    <IntDir>$(Configuration)</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NTS|x64'">
-    <OutDir>.\pdo_7_cubrid___x64_Release_NTS\</OutDir>
-    <IntDir>.\pdo_7_cubrid___x64_Release_NTS\</IntDir>
+    <OutDir>$(Configuration)</OutDir>
+    <IntDir>$(Configuration)</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TS|Win32'">
@@ -211,7 +174,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\pdo_7_cubrid___Win32_Release_TS/pdo_cubrid.tlb</TypeLibraryName>
+      <TypeLibraryName>.\$(Configuration)/pdo_cubrid.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -222,10 +185,10 @@
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeaderOutputFile>.\pdo_7_cubrid___Win32_Release_TS/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\pdo_7_cubrid___Win32_Release_TS/</AssemblerListingLocation>
-      <ObjectFileName>.\pdo_7_cubrid___Win32_Release_TS/</ObjectFileName>
-      <ProgramDataBaseFileName>.\pdo_7_cubrid___Win32_Release_TS/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>.\$(Configuration)/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\$(Configuration)/</AssemblerListingLocation>
+      <ObjectFileName>.\$(Configuration)/</ObjectFileName>
+      <ProgramDataBaseFileName>.\$(Configuration)/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -237,19 +200,19 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;php7ts.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_7_cubrid___Win32_Release_TS/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ProgramDatabaseFile>.\pdo_7_cubrid___Win32_Release_TS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
-      <ImportLibrary>.\pdo_7_cubrid___Win32_Release_TS/php_pdo_cubrid.lib</ImportLibrary>
+      <ImportLibrary>.\$(Configuration)/php_pdo_cubrid.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\pdo_7_cubrid___Win32_Release_TS/pdo_cubrid.bsc</OutputFile>
+      <OutputFile>.\$(Configuration)/pdo_cubrid.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TS|x64'">
@@ -258,7 +221,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\pdo_7_cubrid___Win32_Release_TS/pdo_cubrid.tlb</TypeLibraryName>
+      <TypeLibraryName>.\$(Configuration)/pdo_cubrid.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -269,10 +232,10 @@
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeaderOutputFile>.\pdo_7_cubrid___x64_Release_TS/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\pdo_7_cubrid___x64_Release_TS/</AssemblerListingLocation>
-      <ObjectFileName>.\pdo_7_cubrid___x64_Release_TS/</ObjectFileName>
-      <ProgramDataBaseFileName>.\pdo_7_cubrid___x64_Release_TS/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>.\$(Configuration)/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\$(Configuration)/</AssemblerListingLocation>
+      <ObjectFileName>.\$(Configuration)/</ObjectFileName>
+      <ProgramDataBaseFileName>.\$(Configuration)/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -284,21 +247,21 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;php7ts.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_7_cubrid___x64_Release_TS/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ProgramDatabaseFile>.\pdo_7_cubrid___x64_Release_TS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
-      <ImportLibrary>.\pdo_7_cubrid___x64_Release_TS/php_pdo_cubrid.lib</ImportLibrary>
+      <ImportLibrary>.\$(Configuration)/php_pdo_cubrid.lib</ImportLibrary>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\pdo_7_cubrid___x64_Release_TS/pdo_cubrid.bsc</OutputFile>
+      <OutputFile>.\$(Configuration)/pdo_cubrid.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|Win32'">
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
@@ -329,7 +292,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci7.lib;ws2_32.lib;php7.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>Debug/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X86)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -344,7 +307,7 @@
       <OutputFile>.\Debug/pdo_cubrid.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|x64'">
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
@@ -375,7 +338,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci7.lib;ws2_32.lib;libregex38a.lib;php7.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>Debug/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X64)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -390,103 +353,13 @@
       <OutputFile>.\Debug/pdo_cubrid.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Midl>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MkTypLibCompatible>true</MkTypLibCompatible>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Release/pdo_cubrid.tlb</TypeLibraryName>
-      <HeaderFileName />
-    </Midl>
-    <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeaderOutputFile>.\Release/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
-      <ObjectFileName>.\Release/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0804</Culture>
-    </ResourceCompile>
-    <Link>
-      <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci7.lib;ws2_32.lib;php7.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>Release/$(ProjectName).dll</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(PHP7_NTS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ProgramDatabaseFile>.\Release/php_pdo_cubrid.pdb</ProgramDatabaseFile>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <DataExecutionPrevention />
-      <ImportLibrary>.\Release/php_pdo_cubrid.lib</ImportLibrary>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release/pdo_cubrid.bsc</OutputFile>
-    </Bscmake>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Midl>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MkTypLibCompatible>true</MkTypLibCompatible>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\Release/pdo_cubrid.tlb</TypeLibraryName>
-      <HeaderFileName />
-    </Midl>
-    <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeaderOutputFile>.\Release/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
-      <ObjectFileName>.\Release/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0804</Culture>
-    </ResourceCompile>
-    <Link>
-      <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci7.lib;ws2_32.lib;libregex38a.lib;php7.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>Release/$(ProjectName).dll</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(PHP7_NTS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ProgramDatabaseFile>.\Release/php_pdo_cubrid.pdb</ProgramDatabaseFile>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <DataExecutionPrevention />
-      <ImportLibrary>.\Release/php_pdo_cubrid.lib</ImportLibrary>
-      <TargetMachine>MachineX64</TargetMachine>
-    </Link>
-    <Bscmake>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release/pdo_cubrid.bsc</OutputFile>
-    </Bscmake>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TS|Win32'">
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\pdo_7_cubrid___Win32_Debug_TS/pdo_cubrid.tlb</TypeLibraryName>
+      <TypeLibraryName>.\$(Configuration)/pdo_cubrid.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -496,10 +369,10 @@
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PrecompiledHeaderOutputFile>.\pdo_7_cubrid___Win32_Debug_TS/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\pdo_7_cubrid___Win32_Debug_TS/</AssemblerListingLocation>
-      <ObjectFileName>.\pdo_7_cubrid___Win32_Debug_TS/</ObjectFileName>
-      <ProgramDataBaseFileName>.\pdo_7_cubrid___Win32_Debug_TS/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>.\$(Configuration)/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\$(Configuration)/</AssemblerListingLocation>
+      <ObjectFileName>.\$(Configuration)/</ObjectFileName>
+      <ProgramDataBaseFileName>.\$(Configuration)/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -511,19 +384,19 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_7_cubrid___Win32_Debug_TS/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X86)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\pdo_7_cubrid___Win32_Debug_TS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
-      <ImportLibrary>.\pdo_7_cubrid___Win32_Debug_TS/php_pdo_cubrid.lib</ImportLibrary>
+      <ImportLibrary>.\$(Configuration)/php_pdo_cubrid.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\pdo_7_cubrid___Win32_Debug_TS/pdo_cubrid.bsc</OutputFile>
+      <OutputFile>.\$(Configuration)/pdo_cubrid.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TS|x64'">
@@ -532,7 +405,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\pdo_7_cubrid___Win32_Debug_TS/pdo_cubrid.tlb</TypeLibraryName>
+      <TypeLibraryName>.\$(Configuration)/pdo_cubrid.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -542,10 +415,10 @@
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PrecompiledHeaderOutputFile>.\pdo_7_cubrid___x64_Debug_TS/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\pdo_7_cubrid___x64_Debug_TS/</AssemblerListingLocation>
-      <ObjectFileName>.\pdo_7_cubrid___x64_Debug_TS/</ObjectFileName>
-      <ProgramDataBaseFileName>.\pdo_7_cubrid___x64_Debug_TS/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>.\$(Configuration)/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\$(Configuration)/</AssemblerListingLocation>
+      <ObjectFileName>.\$(Configuration)/</ObjectFileName>
+      <ProgramDataBaseFileName>.\$(Configuration)/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -557,19 +430,19 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_7_cubrid___x64_Debug_TS/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X64)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\pdo_7_cubrid___x64_Debug_TS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
-      <ImportLibrary>.\pdo_7_cubrid___x64_Debug_TS/php_pdo_cubrid.lib</ImportLibrary>
+      <ImportLibrary>.\$(Configuration)/php_pdo_cubrid.lib</ImportLibrary>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\pdo_7_cubrid___Win32_Debug_TS/pdo_cubrid.bsc</OutputFile>
+      <OutputFile>.\$(Configuration)/pdo_cubrid.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_NTS|Win32'">
@@ -578,7 +451,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\pdo_7_cubrid___Win32_Release_NTS/pdo_cubrid.tlb</TypeLibraryName>
+      <TypeLibraryName>.\$(Configuration)/pdo_cubrid.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -589,10 +462,10 @@
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeaderOutputFile>.\pdo_7_cubrid___Win32_Release_NTS/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\pdo_7_cubrid___Win32_Release_NTS/</AssemblerListingLocation>
-      <ObjectFileName>.\pdo_7_cubrid___Win32_Release_NTS/</ObjectFileName>
-      <ProgramDataBaseFileName>.\pdo_7_cubrid___Win32_Release_NTS/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>.\$(Configuration)/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\$(Configuration)/</AssemblerListingLocation>
+      <ObjectFileName>.\$(Configuration)/</ObjectFileName>
+      <ProgramDataBaseFileName>.\$(Configuration)/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -604,19 +477,19 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;php7.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_7_cubrid___Win32_Release_NTS/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ProgramDatabaseFile>.\pdo_7_cubrid___Win32_Release_NTS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
-      <ImportLibrary>.\pdo_7_cubrid___Win32_Release_NTS/php_pdo_cubrid.lib</ImportLibrary>
+      <ImportLibrary>.\$(Configuration)/php_pdo_cubrid.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\pdo_7_cubrid___Win32_Release_NTS/pdo_cubrid.bsc</OutputFile>
+      <OutputFile>.\$(Configuration)/pdo_cubrid.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_NTS|x64'">
@@ -625,7 +498,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>X64</TargetEnvironment>
-      <TypeLibraryName>.\pdo_7_cubrid___Win32_Release_TS/pdo_cubrid.tlb</TypeLibraryName>
+      <TypeLibraryName>.\$(Configuration)/pdo_cubrid.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -636,10 +509,10 @@
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeaderOutputFile>.\pdo_7_cubrid___x64_Release_NTS/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\pdo_7_cubrid___x64_Release_NTS/</AssemblerListingLocation>
-      <ObjectFileName>.\pdo_7_cubrid___x64_Release_NTS/</ObjectFileName>
-      <ProgramDataBaseFileName>.\pdo_7_cubrid___x64_Release_NTS/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>.\$(Configuration)/pdo_cubrid.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\$(Configuration)/</AssemblerListingLocation>
+      <ObjectFileName>.\$(Configuration)/</ObjectFileName>
+      <ProgramDataBaseFileName>.\$(Configuration)/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -651,18 +524,18 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;libregex38a.lib;php7.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>pdo_7_cubrid___x64_Release_NTS/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ProgramDatabaseFile>.\pdo_7_cubrid___x64_Release_NTS/php_pdo_cubrid.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
-      <ImportLibrary>.\pdo_7_cubrid___x64_Release_NTS/php_pdo_cubrid.lib</ImportLibrary>
+      <ImportLibrary>.\$(Configuration)/php_pdo_cubrid.lib</ImportLibrary>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\pdo_7_cubrid___x64_Release_NTS/pdo_cubrid.bsc</OutputFile>
+      <OutputFile>.\$(Configuration)/pdo_cubrid.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
