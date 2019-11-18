@@ -10,10 +10,10 @@
   <email>esen.sagynov@nhn.com</email>
   <active>yes</active>
  </lead>
- <date>2017-08-07</date>
+ <date>2019-11-30</date>
  <time>17:10:00</time>
  <version>
-  <release>10.1.0.0001</release>
+  <release>10.2.0.0001</release>
   <api>10.1.0</api>
  </version>
  <stability>
@@ -22,7 +22,7 @@
  </stability>
  <license uri="http://www.php.net/license">PHP</license>
  <notes>
-  1) Support cubrid engine version up to 10.1.0
+  1) Support cubrid engine version up to 10.2.x
   2) Support PHP version 7 (7.1.x)
  </notes>
  <contents>
