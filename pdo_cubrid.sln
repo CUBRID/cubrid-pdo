@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pdo5_cubrid", "pdo5_cubrid.vcxproj", "{F2F581A2-AF60-41DC-9520-6FD3B9450322}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pdo5_cubrid", "pdo_cubrid.vcxproj", "{F2F581A2-AF60-41DC-9520-6FD3B9450322}"
 	ProjectSection(ProjectDependencies) = postProject
 		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23} = {20A88132-C7A9-4D49-B8D8-20D7D88BAE23}
 	EndProjectSection
