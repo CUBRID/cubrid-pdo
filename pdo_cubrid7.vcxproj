@@ -43,49 +43,49 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NTS|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TS|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TS|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NTS|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TS|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TS|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -180,7 +180,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;ZTS;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -199,7 +199,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;php7ts.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;php7ts.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -227,7 +227,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;ZTS;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -246,7 +246,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;php7ts.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;php7ts.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -272,7 +272,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -291,7 +291,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci7.lib;ws2_32.lib;php7.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci.lib;ws2_32.lib;php7.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X86)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -318,7 +318,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -337,7 +337,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci7.lib;ws2_32.lib;libregex38a.lib;php7.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci.lib;ws2_32.lib;libregex38a.lib;php7.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X64)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -364,7 +364,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS;WIN32;_DEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;ZTS;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -383,7 +383,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X86)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -410,7 +410,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS;WIN32;_DEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;ZTS;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -429,7 +429,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X64)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -457,7 +457,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -476,7 +476,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;php7.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;php7.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -504,7 +504,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP7_SRC);$(PHP7_SRC)\main;$(PHP7_SRC)\ext;$(PHP7_SRC)\Zend;$(PHP7_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -523,7 +523,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;libregex38a.lib;php7.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;libregex38a.lib;php7.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

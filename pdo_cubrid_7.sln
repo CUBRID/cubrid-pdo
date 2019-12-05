@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pdo7_cubrid", "pdo_cubrid7.vcxproj", "{F2F581A2-AF60-41DC-9520-6FD3B9450322}"
 	ProjectSection(ProjectDependencies) = postProject
 		{20A88132-C7A9-4D49-B8D8-20D7D88BAE23} = {20A88132-C7A9-4D49-B8D8-20D7D88BAE23}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cas_cci7", "cas_cci7.vcxproj", "{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cas_cci_v140_lib", "cci-src\win\cas_cci\cas_cci_v140_lib.vcxproj", "{20A88132-C7A9-4D49-B8D8-20D7D88BAE23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

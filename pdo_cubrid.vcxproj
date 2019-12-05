@@ -179,7 +179,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\src\compat;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;ZTS;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -225,7 +225,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;ZTS;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -270,7 +270,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -317,7 +317,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -365,7 +365,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;ZTS;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -412,7 +412,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;ZTS;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -460,7 +460,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -507,7 +507,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PHP5_SRC);$(PHP5_SRC)\main;$(PHP5_SRC)\ext;$(PHP5_SRC)\Zend;$(PHP5_SRC)\TSRM;cci-src\src\compat;cci-src\include;cci-src\src\cci;cci-src\src\broker;cci-src\src\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PHP_CUBRID_EXPORTS;ZEND_DEBUG=0;COMPILE_DL_PDO_CUBRID;ZEND_WIN32;PHP_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
