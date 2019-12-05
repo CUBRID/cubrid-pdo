@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug_TS|Win32">
       <Configuration>Debug_TS</Configuration>
@@ -43,49 +43,49 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NTS|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TS|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TS|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NTS|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TS|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NTS|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TS|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -200,7 +200,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;php7ts.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
@@ -247,7 +247,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;php7ts.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
@@ -292,7 +292,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci7.lib;ws2_32.lib;php7.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X86)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -338,7 +338,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;cas_cci7.lib;ws2_32.lib;libregex38a.lib;php7.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X64)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -384,7 +384,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X86)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -430,7 +430,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;libregex38a.lib;php7ts.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_TS_X64)\dev;$(SolutionDir)$(Platform)\Debug;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -477,7 +477,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;php7.lib;libregex38a.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X86)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
@@ -524,7 +524,7 @@
     <Link>
       <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci7.lib;libregex38a.lib;php7.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectName)__$(Platform)_$(Configuration)/$(ProjectName).dll</OutputFile>
+      <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(PHP7_NTS_X64)\dev;$(SolutionDir)$(Platform)\Release;cci-src\win\external\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\$(Configuration)/php_pdo_cubrid.pdb</ProgramDatabaseFile>
