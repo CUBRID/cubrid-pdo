@@ -40,6 +40,13 @@
 #include "php_pdo_cubrid_int.h"
 #include <cas_cci.h>
 
+#if !defined(add_assoc_unset)
+#define add_assoc_unset	add_assoc_null
+#endif
+
+#if !defined(add_index_unset)
+#define add_index_unset	add_index_null
+#endif
 /************************************************************************
 * PRIVATE TYPE DEFINITIONS
 ************************************************************************/
@@ -799,10 +806,10 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 		char temp_buffer[1024]={'\0'};
 
 		for (zend_hash_internal_pointer_reset_ex(ht, &position);
-			data = zend_hash_get_current_data_ex(ht, &position) == SUCCESS;
+			data = zend_hash_get_current_data_ex(ht, &position);
 			zend_hash_move_forward_ex(ht, &position)) {
-				char *key = NULL;
-				ulong index;
+				zend_string *key = NULL;
+				zend_ulong index;
 
 				if (Z_TYPE_P(data) != IS_STRING) {
 					pdo_cubrid_error(dbh, CUBRID_ER_INVALID_CONN_STR, NULL, NULL);
@@ -814,7 +821,7 @@ static int pdo_cubrid_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS
 					goto cleanup;
 				} 
 
-				snprintf(temp_buffer, sizeof(temp_buffer)-1, "%s%s=%s", first?"?":"&", key, Z_STRVAL_P(data));
+				snprintf(temp_buffer, sizeof(temp_buffer)-1, "%s%s=%s", first?"?":"&", ZSTR_VAL(key), Z_STRVAL_P(data));
 				strncat(connect_url, temp_buffer, sizeof(connect_url)-strlen(connect_url)-1);
 
 				if (first)
