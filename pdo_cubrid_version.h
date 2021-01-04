@@ -17,4 +17,4 @@
 */
 
 
-#define PDO_CUBRID_VERSION "11.0.0.0000"
+#define PDO_CUBRID_VERSION "11.0.0.0001"
