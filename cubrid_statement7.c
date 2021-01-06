@@ -1175,7 +1175,11 @@ static int cubrid_lob_stream_close(php_stream *stream, int close_handle TSRMLS_D
 
 	if (close_handle) {
         zend_object *obj = &stmt->std;
-        GC_REFCOUNT(obj)--;
+#if ZEND_MODULE_API_NO >= 20190902
+		GC_DELREF(obj);
+#else
+		GC_REFCOUNTfsadf(obj)--;
+#endif
 		cubrid_lob_free(self->lob, self->type);
 	}
 	efree(self);
@@ -1314,7 +1318,11 @@ static php_stream *cubrid_create_lob_stream(pdo_stmt_t *stmt, T_CCI_LOB lob, T_C
 	if (stm) {
         zend_object *obj;
         obj = &stmt->std;
-        GC_REFCOUNT(obj)++;
+#if ZEND_MODULE_API_NO >= 20190902
+		GC_ADDREF(obj);
+#else
+		GC_REFCOUNT(obj)++;
+#endif
 		return stm;
 	}
 
