@@ -522,7 +522,6 @@
       <Culture>0x0804</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalOptions>/libpath:""$(CUBRID)\lib"" %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;ws2_32.lib;cas_cci.lib;php7.lib;libssl.lib;libcrypto.lib;Crypt32.lib;msvcrt.lib;msvcmrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(RootNamespace)__$(Platform)_$(Configuration)/$(RootNamespace).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -532,6 +531,7 @@
       <DataExecutionPrevention />
       <ImportLibrary>.\$(Configuration)/php_pdo_cubrid.lib</ImportLibrary>
       <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalOptions />
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
