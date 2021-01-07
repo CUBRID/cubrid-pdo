@@ -1178,7 +1178,7 @@ static int cubrid_lob_stream_close(php_stream *stream, int close_handle TSRMLS_D
 #if ZEND_MODULE_API_NO >= 20190902
         GC_DELREF(obj);
 #else
-        GC_REFCOUNTfsadf(obj)--;
+        GC_REFCOUNT(obj)--;
 #endif
 		cubrid_lob_free(self->lob, self->type);
 	}
