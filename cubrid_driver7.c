@@ -90,7 +90,7 @@ static int cubrid_get_err_msg(int err_code, char *err_buf, int buf_size);
 static int get_db_param(pdo_cubrid_db_handle *H, T_CCI_ERROR *error);
 static int fetch_a_row(zval *arg, int req_handle, int type TSRMLS_DC);
 static int cubrid_array_destroy(HashTable * ht ZEND_FILE_LINE_DC);
-static int cubrid_add_index_array(zval *arg, uint index, T_CCI_SET in_set TSRMLS_DC);
+static int cubrid_add_index_array(zval *arg, zend_ulong index, T_CCI_SET in_set TSRMLS_DC);
 static int cubrid_add_assoc_array(zval *arg, char *key, T_CCI_SET in_set TSRMLS_DC);
 
 /************************************************************************
@@ -982,7 +982,7 @@ static int fetch_a_row(zval *arg, int req_handle, int type TSRMLS_DC)
 				}
 			} else {
 				if (type & CUBRID_NUM) {
-					cubrid_retval = cubrid_add_index_array(arg, i, res_buf TSRMLS_CC);
+					cubrid_retval = cubrid_add_index_array(arg, (zend_ulong)i, res_buf TSRMLS_CC);
 				} 
 				
 				if (type & CUBRID_ASSOC) {
@@ -1037,7 +1037,7 @@ static int cubrid_array_destroy(HashTable * ht ZEND_FILE_LINE_DC)
     return SUCCESS;
 }
 
-static int cubrid_add_index_array(zval *arg, uint index, T_CCI_SET in_set TSRMLS_DC)
+static int cubrid_add_index_array(zval *arg, zend_ulong index, T_CCI_SET in_set TSRMLS_DC)
 {
     zval tmp_zval;
 

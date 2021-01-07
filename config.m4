@@ -37,8 +37,6 @@ if test "$PHP_PDO_CUBRID" != "no"; then
     	    AC_MSG_NOTICE([Build static cci lib 64 bits])
             pushd $CCISRC_DIR
             chmod +x configure
-            chmod +x external/libregex38a/configure
-            chmod +x external/libregex38a/install-sh
             ./configure --enable-64bit
     	    make
             popd
@@ -46,8 +44,6 @@ if test "$PHP_PDO_CUBRID" != "no"; then
     	    AC_MSG_NOTICE([Build static cci lib])
             pushd $CCISRC_DIR
             chmod +x configure
-            chmod +x external/libregex38a/configure
-            chmod +x external/libregex38a/install-sh
             ./configure
     	    make
             popd
@@ -64,8 +60,6 @@ if test "$PHP_PDO_CUBRID" != "no"; then
     	    AC_MSG_NOTICE([Build static cci lib 64 bits])
             pushd $CCISRC_DIR
             chmod +x configure
-            chmod +x external/libregex38a/configure
-            chmod +x external/libregex38a/install-sh
             ./configure--enable-64bit
     	    make
             popd
@@ -73,8 +67,6 @@ if test "$PHP_PDO_CUBRID" != "no"; then
     	    AC_MSG_NOTICE([Build static cci lib])
             pushd $CCISRC_DIR
             chmod +x configure
-            chmod +x external/libregex38a/configure
-            chmod +x external/libregex38a/install-sh
             ./configure
     	    make
             popd
@@ -111,7 +103,7 @@ if test "$PHP_PDO_CUBRID" != "no"; then
 
     PHP_ADD_LIBRARY(stdc++, , PDO_CUBRID_SHARED_LIBADD)
     PHP_ADD_LIBRARY(pthread, , PDO_CUBRID_SHARED_LIBADD)
-    LDFLAGS="$LDFLAGS $CUBRID_LIBDIR/libcascci.a -lpthread"
+    LDFLAGS="$LDFLAGS $CUBRID_LIBDIR/libcascci.a -lpthread  $cubrid_dir/cci-src/external/openssl/lib/libssl.a $cubrid_dir/cci-src/external/openssl/lib/libcrypto.a"
   
     PHP_SUBST(PDO_CUBRID_SHARED_LIBADD)
 
