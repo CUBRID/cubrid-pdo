@@ -7,7 +7,7 @@ CUBRID PDO Library is the official PDO Extension to connect to CUBRID Database.
 
 For more information about CUBRID PDO Library, visit the web site:
 
-https://www.cubrid.org/manual/en/10.2/api/pdo.html
+https://www.cubrid.org/manual/en/11.0/api/pdo.html
 
 
 For more information about CUBRID, visit the web site: 
@@ -19,7 +19,7 @@ CUBRID and CUBRID APIs are developed with open source projects.
 
 For more information about CUBRID APIs project, visit the web site:
 
-https://www.cubrid.org/manual/en/10.2/api/index.html
+https://www.cubrid.org/manual/en/11.0/api/index.html
 
 
 For more information about CUBRID project, visit the web site: 
@@ -32,7 +32,7 @@ Database engine is under Apache License 2.0 and the APIs are under BSD license.
 
 For more information, visit the web site:
 
-https://www.cubrid.org/manual/en/10.2/release_note/index.html#license
+https://www.cubrid.org/manual/en/11.0/release_note/index.html#license
 
 
 4. Build
@@ -42,7 +42,7 @@ http://ftp.cubrid.org/CUBRID_Drivers/PHP_Driver/PDO/
 
 More detailed build manual can be found at: 
 
-https://www.cubrid.org/manual/en/10.2/api/adodotnet.html#installing-and-configuring-ado-net
+https://www.cubrid.org/manual/en/11.0/api/pdo.html#installing-and-configuring-pdo
 
 
 5. Source modules

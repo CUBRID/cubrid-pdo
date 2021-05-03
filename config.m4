@@ -36,6 +36,7 @@ if test "$PHP_PDO_CUBRID" != "no"; then
         if test "$ac_cv_sizeof_int_p" = "8"; then
     	    AC_MSG_NOTICE([Build static cci lib 64 bits])
             pushd $CCISRC_DIR
+            touch configure.ac
             chmod +x configure
             ./configure --enable-64bit
     	    make
@@ -43,6 +44,7 @@ if test "$PHP_PDO_CUBRID" != "no"; then
         else
     	    AC_MSG_NOTICE([Build static cci lib])
             pushd $CCISRC_DIR
+            touch configure.ac
             chmod +x configure
             ./configure
     	    make
@@ -59,6 +61,7 @@ if test "$PHP_PDO_CUBRID" != "no"; then
         if test "$ac_cv_sizeof_int_p" = "8"; then
     	    AC_MSG_NOTICE([Build static cci lib 64 bits])
             pushd $CCISRC_DIR
+            touch configure.ac
             chmod +x configure
             ./configure--enable-64bit
     	    make
@@ -66,6 +69,7 @@ if test "$PHP_PDO_CUBRID" != "no"; then
         else
     	    AC_MSG_NOTICE([Build static cci lib])
             pushd $CCISRC_DIR
+            touch configure.ac
             chmod +x configure
             ./configure
     	    make
