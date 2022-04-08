@@ -39,6 +39,7 @@
 #include "php_pdo_cubrid.h"
 #include "php_pdo_cubrid_int.h"
 #include <cas_cci.h>
+#include <broker_cas_error.h>
 
 #if !defined(add_assoc_unset)
 #define add_assoc_unset	add_assoc_null
