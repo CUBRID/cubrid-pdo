@@ -101,7 +101,7 @@ array(16) {
   ["name"]=>
   string(1) "a"
   ["table"]=>
-  string(11) "cubrid_test"
+  string(15) "dba.cubrid_test"
   ["def"]=>
   string(4) "NULL"
   ["precision"]=>
@@ -129,3 +129,4 @@ array(16) {
   ["pdo_type"]=>
   int(2)
 }
+

@@ -62,7 +62,7 @@ array(16) {
   ["name"]=>
   string(2) "id"
   ["table"]=>
-  string(11) "cubrid_test"
+  string(15) "dba.cubrid_test"
   ["def"]=>
   string(4) "NULL"
   ["precision"]=>
@@ -96,7 +96,7 @@ array(16) {
   ["name"]=>
   string(3) "val"
   ["table"]=>
-  string(11) "cubrid_test"
+  string(15) "dba.cubrid_test"
   ["def"]=>
   string(4) "NULL"
   ["precision"]=>
@@ -130,7 +130,7 @@ array(16) {
   ["name"]=>
   string(4) "val2"
   ["table"]=>
-  string(11) "cubrid_test"
+  string(15) "dba.cubrid_test"
   ["def"]=>
   string(4) "NULL"
   ["precision"]=>
@@ -160,7 +160,7 @@ array(16) {
 }
 array(16) {
   ["type"]=>
-  string(7) "integer"
+  string(6) "bigint"
   ["name"]=>
   string(8) "count(*)"
   ["table"]=>
@@ -168,7 +168,7 @@ array(16) {
   ["def"]=>
   string(0) ""
   ["precision"]=>
-  int(10)
+  int(19)
   ["scale"]=>
   int(0)
   ["not_null"]=>
@@ -188,7 +188,7 @@ array(16) {
   ["reverse_unique"]=>
   int(0)
   ["len"]=>
-  int(11)
+  int(20)
   ["pdo_type"]=>
   int(2)
 }
