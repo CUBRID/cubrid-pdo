@@ -15,7 +15,7 @@ $result = $db->query('SELECT 1 FROM db_root');
 
 var_dump($result->getColumnMeta(0));
 
-$result = $db->query('SELECT * FROM game limit 1');
+$result = $db->query('SELECT * FROM public.game limit 1');
 
 var_dump($result->getColumnMeta(0));
 var_dump($result->getColumnMeta(1));
@@ -63,7 +63,7 @@ array(16) {
   ["name"]=>
   string(9) "host_year"
   ["table"]=>
-  string(4) "game"
+  string(11) "public.game"
   ["def"]=>
   string(4) "NULL"
   ["precision"]=>
@@ -97,7 +97,7 @@ array(16) {
   ["name"]=>
   string(10) "event_code"
   ["table"]=>
-  string(4) "game"
+  string(11) "public.game"
   ["def"]=>
   string(4) "NULL"
   ["precision"]=>
@@ -131,7 +131,7 @@ array(16) {
   ["name"]=>
   string(11) "nation_code"
   ["table"]=>
-  string(4) "game"
+  string(11) "public.game"
   ["def"]=>
   string(4) "NULL"
   ["precision"]=>
@@ -165,7 +165,7 @@ array(16) {
   ["name"]=>
   string(9) "game_date"
   ["table"]=>
-  string(4) "game"
+  string(11) "public.game"
   ["def"]=>
   string(4) "NULL"
   ["precision"]=>
