@@ -668,6 +668,7 @@ static PHP_METHOD(PDO, cubrid_schema)
 		break;
     case CUBRID_SCH_ATTRIBUTE:
     case CUBRID_SCH_TABLE_ATTRIBUTE:
+    case CUBRID_SCH_ATTR_WITH_SYNONYM:
 		flag = CCI_ATTR_NAME_PATTERN_MATCH;
 		break;
     default:
