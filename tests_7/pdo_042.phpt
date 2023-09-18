@@ -31,6 +31,10 @@ var_dump($pk_list);
 $pk_list = $db->cubrid_schema(PDO::CUBRID_SCH_ATTR_WITH_SYNONYM, "dba.s%", "col1%");
 var_dump($pk_list);
 
+$u1_db = PDOSynonymTest::user_factory();
+$pk_list = $u1_db->cubrid_schema(PDO::CUBRID_SCH_ATTR_WITH_SYNONYM, "s1", "col1");
+var_dump($pk_list);
+
 ?>
 --EXPECTF--
 array(1) {
@@ -193,6 +197,8 @@ array(3) {
     ["REMARKS"]=>
     string(0) ""
   }
+}
+array(0) {
 }
 array(0) {
 }
