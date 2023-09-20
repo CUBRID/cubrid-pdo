@@ -5,7 +5,7 @@ class PDOSynonymTest {
 	// create an instance of the PDO driver, based on
 	// the current environment
 	static function factory($classname = 'PDO', $drop_test_tables = true) {
-		$dsn = 'cubrid:host=test-db-server;port=33000;dbname=demodb';
+		$dsn = 'cubrid:host=localhost;port=33000;dbname=demodb';
 		$user = 'dba';
 		$pass = '';
 		$attr = NULL;
