@@ -5,7 +5,7 @@ class PDOTest {
 	// create an instance of the PDO driver, based on
 	// the current environment
 	static function factory($classname = 'PDO', $drop_test_tables = true) {
-		$dsn = 'cubrid:host=localhost;port=33000;dbname=demodb';
+		$dsn = 'cubrid:host=localhost;port=33452;dbname=demodb';
 		$user = 'dba';
 		$pass = '';
 		$attr = NULL;
@@ -60,6 +60,34 @@ class PDOTest {
 			putenv("$k=$v");
 		}
 		return self::factory();
+	}
+
+        static function user_factory($classname = 'PDO', $drop_test_tables = true) {
+		$dsn = 'cubrid:host=localhost;port=33452;dbname=demodb';
+		$user = 'u1';
+		$pass = '';
+		$attr = NULL;
+                
+		if (is_string($attr) && strlen($attr)) {
+			$attr = unserialize($attr);
+		} else {
+			$attr = null;
+		}
+
+		if ($user === false) $user = NULL;
+		if ($pass === false) $pass = NULL;
+
+		$db = new $classname($dsn, $user, $pass, $attr);
+
+		if (!$db) {
+			die("Could not create PDO object (DSN=$dsn, user=$user)\n");
+		}
+
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+		$db->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+		$db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, true);
+		
+		return $db;
 	}
 }
 ?>
