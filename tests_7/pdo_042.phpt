@@ -5,19 +5,17 @@ PDO::cubrid_schema
 if (!extension_loaded("pdo")) die("skip");
 require_once 'pdo_test.inc';
 PDOTest::skip();
-
-if (!extension_loaded("pdo")) die("skip");
-require_once 'pdo_synonym_test.inc';
-PDOSynonymTest::skip();
 ?>
 --FILE--
 <?php
 
-require_once 'pdo_synonym_test.inc';
-$syn_db = PDOSynonymTest::factory();
-
 require_once 'pdo_test.inc';
 $db = PDOTest::factory();
+
+$db->exec('CREATE USER u1');
+$db->exec('CREATE TABLE u1.t1(col1 int, col2 varchar(10), col3 double)');
+$db->exec('Grant SELECT ON u1.t1 TO dba;');
+$db->exec('CREATE synonym dba.s1 for u1.t1');
 
 $pk_list = $db->cubrid_schema(PDO::CUBRID_SCH_ATTR_WITH_SYNONYM, "s1", "col1");
 var_dump($pk_list);
@@ -31,9 +29,14 @@ var_dump($pk_list);
 $pk_list = $db->cubrid_schema(PDO::CUBRID_SCH_ATTR_WITH_SYNONYM, "dba.s%", "col1%");
 var_dump($pk_list);
 
-$u1_db = PDOSynonymTest::user_factory();
+$u1_db = PDOTest::user_factory();
 $pk_list = $u1_db->cubrid_schema(PDO::CUBRID_SCH_ATTR_WITH_SYNONYM, "s1", "col1");
 var_dump($pk_list);
+$u1_db = null;
+
+$db->exec('drop synonym if exists dba.s1');
+$db->exec('drop table if EXISTS u1.t1');
+$db->exec('DROP USER u1');
 
 ?>
 --EXPECTF--
