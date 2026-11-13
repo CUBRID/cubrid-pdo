@@ -5,13 +5,29 @@ dnl don't forget to call PHP_EXTENSION(cubrid)
 dnl If your extension references something external, use with:
 
 PHP_ARG_WITH(pdo-cubrid, for CUBRID support for PDO,
-[  --with-pdo-cubrid         PDO: CUBRID support.])
-
-dnl Check PHP version:
-AC_MSG_CHECKING(PHP version)
-PHP_MAJOR_VERSION=`grep 'PHP_MAJOR_VERSION' $phpincludedir/main/php_version.h | grep -oP '\d+'`
+[  --with-pdo-cubrid         PDO: CUBRID support.], yes)
 
 if test "$PHP_PDO_CUBRID" != "no"; then
+
+    dnl Supported PHP versions: 8.3 or later (Windows: 8.4 or later, see config.w32)
+    AC_MSG_CHECKING([for PHP version])
+    cubrid_php_vernum=`$PHP_CONFIG --vernum 2>/dev/null`
+    if test -z "$cubrid_php_vernum"; then
+        for cubrid_ver_h in "$phpincludedir/main/php_version.h" "$abs_srcdir/main/php_version.h"; do
+            if test -r "$cubrid_ver_h"; then
+                cubrid_php_vernum=`sed -n 's/^#define PHP_VERSION_ID \([[0-9]]*\).*/\1/p' "$cubrid_ver_h"`
+                break
+            fi
+        done
+    fi
+    if test -z "$cubrid_php_vernum"; then
+        AC_MSG_RESULT([unknown])
+    else
+        AC_MSG_RESULT([$cubrid_php_vernum])
+        if test "$cubrid_php_vernum" -lt 80300; then
+            AC_MSG_ERROR([pdo_cubrid requires PHP 8.3 or later])
+        fi
+    fi
 
     cubrid_dir=`dirname $0`
     CUBRID_INCDIR=""
@@ -85,11 +101,7 @@ if test "$PHP_PDO_CUBRID" != "no"; then
   
     PHP_SUBST(PDO_CUBRID_SHARED_LIBADD)
 
-    if test "$PHP_MAJOR_VERSION" = "7"; then
-        PHP_NEW_EXTENSION(pdo_cubrid, pdo_cubrid.c cubrid_driver7.c cubrid_statement7.c, $ext_shared,,-I$pdo_inc_path -I)
-    else
-        PHP_NEW_EXTENSION(pdo_cubrid, pdo_cubrid.c cubrid_driver.c cubrid_statement.c, $ext_shared,,-I$pdo_inc_path -I)
-    fi
+    PHP_NEW_EXTENSION(pdo_cubrid, pdo_cubrid8.c cubrid_driver8.c cubrid_statement8.c, $ext_shared,,-I$pdo_inc_path -I)
 
     ifdef([PHP_ADD_EXTENSION_DEP],
     [
