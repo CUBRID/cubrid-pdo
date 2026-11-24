@@ -41,7 +41,7 @@ version_macro=PDO_CUBRID_VERSION
 # files and directories of the driver to package (relative to the repository root)
 driver_files="config.m4 config.w32 pdo_cubrid8.c cubrid_driver8.c cubrid_statement8.c
               pdo_cubrid_version.h php_pdo_cubrid8.h php_pdo_cubrid8_int.h
-              composer.json LICENSE CREDITS README.md build-guide.html build.sh"
+              composer.json LICENSE CREDITS README.md build-guide.md build.sh"
 # -----------------------------------------------------------------------------
 
 # files and directories of cci-src needed by the Linux build

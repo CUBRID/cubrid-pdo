@@ -18,7 +18,7 @@ CUBRID PDO Driver (`pdo_cubrid`) is the official PDO driver (`new PDO("cubrid:..
 | Linux x86_64 | 8.3, 8.4, 8.5 (NTS, ZTS) | GCC | `pdo_cubrid.so` (CCI and OpenSSL linked statically) |
 | Windows x64 | 8.4, 8.5 (NTS, TS) | Visual Studio 2022 (vs17) | `php_pdo_cubrid.dll` + `cascci.dll` |
 
-32-bit platforms and ARM64 are not supported. PHP 8.2 and earlier are not supported;
+32-bit platforms and ARM64 are not supported. PHP 8.2 and earlier are not supported.
 
 The driver requires the PDO extension of PHP. PDO is built into most PHP builds; when it is a shared module (`pdo.so`), it must be loaded before `pdo_cubrid`.
 
