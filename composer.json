@@ -1,0 +1,28 @@
+{
+    "name": "cubrid/pdo_cubrid",
+    "type": "php-ext",
+    "description": "The official CUBRID database driver for PDO",
+    "keywords": ["cubrid", "pdo", "database", "driver", "extension"],
+    "homepage": "https://www.cubrid.org",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "CUBRID Corporation",
+            "homepage": "https://www.cubrid.org"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/CUBRID/cubrid-pdo/issues",
+        "source": "https://github.com/CUBRID/cubrid-pdo",
+        "docs": "https://www.cubrid.org/manual/en/11.4/api/pdo.html"
+    },
+    "require": {
+        "php": ">=8.3",
+        "ext-pdo": "*"
+    },
+    "php-ext": {
+        "extension-name": "pdo_cubrid",
+        "download-url-method": ["pre-packaged-source"],
+        "os-families": ["linux", "windows"]
+    }
+}

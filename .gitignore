@@ -1,0 +1,17 @@
+# out-of-tree builds: build_linux/ (build.sh) and build_win/ (build_win.ps1)
+/build_*/
+# run-tests.php output of failed tests
+/tests_8x/*.diff
+/tests_8x/*.exp
+/tests_8x/*.log
+/tests_8x/*.out
+/tests_8x/*.php
+/tests_8x/*.sh
+!/tests_8x/run-tests.php
+!/tests_8x/run_tests.sh
+
+#ignore
+.vscode/
+
+# release packages made by script/release.sh / script/release.ps1
+/script/release/
